@@ -1,9 +1,12 @@
 'use strict'
 var async = require('async');
 var TreeStore = require('../stores/TreeStore');
+var deckActions = require('../actions/DeckActions');
 
 exports.deleteFrom = function(context, payload, done){
     context.dispatch('DELETE_FROM', payload);
+    
+    //context.executeAction(deckActions.loadSlides, {deck:payload.deck, selector: payload.selector});
     done();
 };
 
@@ -28,7 +31,7 @@ exports._onDrop = function(context, payload, done){
     done();
 };
 exports._updateSelector = function(context, payload, done){
-    context.dispatch('UPDATE_TREE_NODE_SELECTOR', payload);
+    context.dispatch('ENRICH_TREE_NODE_SELECTOR', payload);
     done();
 };
 exports._onDragEnd = function(context){

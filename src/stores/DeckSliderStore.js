@@ -1,5 +1,6 @@
 'use strict';
 var createStore = require('fluxible/utils/createStore');
+var _ = require('lodash');
 
 module.exports = createStore({
   storeName: 'DeckSliderStore',
@@ -33,6 +34,7 @@ module.exports = createStore({
       this.theme = theme;
       this.emitChange();
   },
+  
   _showSliderControlSuccess: function (res) {
     this.visibility=1;
     this.deckID= parseInt(res.deckID);

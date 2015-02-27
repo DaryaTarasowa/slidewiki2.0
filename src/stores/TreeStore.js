@@ -19,6 +19,7 @@ module.exports = createStore({
         'SHOW_DECK_TREE_FAILURE': '_showDeckTreeFailure',
         'SHOW_DECK_TREE_SUCCESS': '_showDeckTreeSuccess',
         'UPDATE_TREE_NODE_SELECTOR': '_updateSelector',
+        ENRICH_TREE_NODE_SELECTOR : '_enrichSelector',
         'ON_DRAG_START': '_onDragStart',
         'CHECK_DROP_POSSIBLE' : '_checkDropPossible',
         'MOVE_ITEM' : 'move_item',
@@ -332,25 +333,35 @@ module.exports = createStore({
             }
         }
     },
+    _enrichSelector: function(res){
+        
+        this.selector = res.selector;        
+        this.emitChange();
+    },
     _updateSelector: function(res) {
         var self = this;
-        this.selector = res.selector;
-        if (res.selected){
-            this.selected = res.selected;
-            self._createBreadcrumbInit(function(path){
-                self.breadcrumb = path;
-                self.emitChange();
-            });
-        }else{
-            self.findSelected(self.nodes, function(selected){
-              
-                self.selected = selected;
-                self._createBreadcrumbInit(function (path) {
+        
+        if (res.selector.id.toString() !== this.selector.id.toString() || res.selector.type.toString() !== this.selector.type.toString()){
+            
+            this.selector = res.selector;
+            if (res.selected){
+                this.selected = res.selected;
+                self._createBreadcrumbInit(function(path){
                     self.breadcrumb = path;
                     self.emitChange();
                 });
-            });   
+            }else{
+                self.findSelected(self.nodes, function(selected){
+
+                    self.selected = selected;
+                    self._createBreadcrumbInit(function (path) {
+                        self.breadcrumb = path;
+                        self.emitChange();
+                    });
+                });   
+            }
         }
+        
         
         
         //this.selected = res.selected;

@@ -8,6 +8,7 @@ var treeActions = require('../actions/TreeActions');
 var TreeNodes = require('./TreeNodes.jsx');
 var updateSliderControl = require('../actions/updateSliderControl');
 var update = require('react/lib/update');
+var navigateAction = require('flux-router-component/actions/navigate');
 
 
 var TreePanel = React.createClass({
@@ -22,18 +23,18 @@ var TreePanel = React.createClass({
        
     },
     getStateFromStores: function () {
-      return {
-          error: this.getStore(TreeStore).getError(),
-          item: this.getStore(TreeStore).getNodes(),
-          selector: this.getStore(TreeStore).getSelector(),
-          dragging: this.getStore(TreeStore).getDragging(),
-          allowDrop: this.getStore(TreeStore).getAllowDrop(),
-          selected: this.getStore(TreeStore).getSelected()
-      };
+        return {
+            error: this.getStore(TreeStore).getError(),
+            item: this.getStore(TreeStore).getNodes(),
+            selector: this.getStore(TreeStore).getSelector(),
+            dragging: this.getStore(TreeStore).getDragging(),
+            allowDrop: this.getStore(TreeStore).getAllowDrop(),
+            selected: this.getStore(TreeStore).getSelected()
+        };
     },
     _onChange: function() {
       
-      this.setState(this.getStateFromStores());
+        this.setState(this.getStateFromStores());
     },
 
     deleteFrom : function(){
@@ -145,6 +146,13 @@ var TreePanel = React.createClass({
               
        // }
     },
+    componentDidUpdate: function(prevProps, prevState){
+        console.log('treePanelUpdated');
+        //$(".sw-tree-view-selected").scrollIntoView();
+        if (prevState.selector.id.toString() != this.state.selector.id.toString() || prevState.selector.type.toString() != this.state.selector.type.toString()){
+            this.props.context.executeAction(navigateAction, {type: 'click', url: '/deck/' + this.state.item.id + '/' + this.state.selector.type + '/' + this.state.selector.id}); 
+        }
+    },
     render: function() {
         
         var tree
@@ -204,10 +212,7 @@ var TreePanel = React.createClass({
     //    this.props.context.executeAction(deckActions.loadUpdateTree, payload);
       
     },
-    componentDidUpdate: function() {
-      //make the selected node visible in the view
-      $(".sw-tree-view-selected").scrollIntoView();
-    }
+    
 });
 
 module.exports = TreePanel;

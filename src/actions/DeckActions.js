@@ -123,6 +123,7 @@ var DeckActions = {
     loadUpdateTree: function(context, payload, done){
         if (context.getStore(TreeStore).isAlreadyComplete(payload.deck)) {
             //only highlight node
+            console.log('update');
             context.executeAction(module.exports.updateTreeNodeSelector, {
                 deck: payload.deck,
                 selector: payload.selector
