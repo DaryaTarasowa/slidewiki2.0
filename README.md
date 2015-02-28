@@ -8,7 +8,6 @@ Usage
 ```
 npm install
 bower install
-npm run build
 npm start
 ```
 
@@ -22,7 +21,7 @@ for development environemnt.
 
 Open http://localhost:3000
 
-For more information on what's going on, you can use `DEBUG=* node` to see full debug output on the server.
+
 
 License
 =======
