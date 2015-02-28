@@ -16,7 +16,7 @@ module.exports = createStore({
     
     this.content_type = res.selector.type;
     this.content_id = res.selector.id;
-    this.mode = res.mode;
+    this.mode = res.selector.mode;
     this.emitChange();
   },
   getContentType: function () {

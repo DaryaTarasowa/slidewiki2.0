@@ -43,8 +43,7 @@ module.exports = function(context, payload, done) {
         //first need to prepare the right container for deck/slide/etc.
         
         context.executeAction(prepareContentType, {
-          selector: payload.selector,
-          mode: payload.mode
+          selector: payload.selector
         }, function(res) {
             
           //then run the corresponding action
@@ -88,7 +87,8 @@ module.exports = function(context, payload, done) {
             context.executeAction(updateSliderControl, {
               selector: {
                 type: 'slide',
-                id: payload.selector.id
+                id: payload.selector.id,
+                mode: payload.selector.mode
               }
             }, callback);
           } else {
@@ -98,7 +98,8 @@ module.exports = function(context, payload, done) {
               deck: payload.deck,
               selector: {
                 type: 'slide',
-                id: payload.selector.id
+                id: payload.selector.id,
+                mode: payload.selector.mode
               }
             }, callback);
           }

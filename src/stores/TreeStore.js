@@ -360,12 +360,12 @@ module.exports = createStore({
                     });
                 });   
             }
+        }else{
+            if (res.selector.mode.toString() !== this.selector.mode.toString()){
+                this.selector = res.selector;
+            }
         }
         
-        
-        
-        //this.selected = res.selected;
-       
     },
     _createBreadcrumbInit: function (fn) {
         var found = 0;
@@ -441,7 +441,7 @@ module.exports = createStore({
     //todo: we can change this on update actions to reload tree
     isAlreadyComplete: function (deck_id) {
         
-        if (JSON.stringify(this.nodes) === '{}' || this.nodes.id !== deck_id) {
+        if (JSON.stringify(this.nodes) === '{}' || this.nodes.id.toString() !== deck_id.toString()) {
             //empty
             return false;
         } else {

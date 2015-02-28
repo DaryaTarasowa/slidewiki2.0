@@ -3,8 +3,10 @@ var React = require('react');
 var StoreMixin = require('fluxible').Mixin;
 //stores
 var DeckSliderStore = require('../stores/DeckSliderStore');
+var TreeStore = require('../stores/TreeStore');
 //actions
 var navigateAction = require('flux-router-component/actions/navigate');
+var deckActions = require('../actions/DeckActions');
 
 var SliderControl = React.createClass({
     mixins: [StoreMixin],
@@ -25,42 +27,43 @@ var SliderControl = React.createClass({
         previous: this.getStore(DeckSliderStore).getPreviousSlide(),
         current: this.getStore(DeckSliderStore).getCurrentSlide(),
         first: this.getStore(DeckSliderStore).getFirstSlide(),
-        last: this.getStore(DeckSliderStore).getLastSlide()
+        last: this.getStore(DeckSliderStore).getLastSlide(),
+        selector: this.getStore(TreeStore).getSelector(),
       };
     },
     _onChange: function() {
       this.setState(this.getStateFromStores());
     },
-    _getPrevPath: function() {
-      return "/deck/"+ this.state.deckID +"/slide/" + this.state.previous.id;
-    },
-    _getNextPath: function() {
-      return "/deck/"+ this.state.deckID +"/slide/" + this.state.next.id;
-    },
-    _getFirstPath: function() {
-      return "/deck/"+ this.state.deckID +"/slide/" + this.state.first.id;
-    },
-    _getLastPath: function() {
-      return "/deck/"+ this.state.deckID +"/slide/" + this.state.last.id;
-    },
+//    _getPrevPath: function() {
+//      return "/deck/"+ this.state.deckID +"/slide/" + this.state.previous.id;
+//    },
+//    _getNextPath: function() {
+//      return "/deck/"+ this.state.deckID +"/slide/" + this.state.next.id;
+//    },
+//    _getFirstPath: function() {
+//      return "/deck/"+ this.state.deckID +"/slide/" + this.state.first.id;
+//    },
+//    _getLastPath: function() {
+//      return "/deck/"+ this.state.deckID +"/slide/" + this.state.last.id;
+//    },
     _onPrevClick: function(e) {
       if(this.state.previous){
-        this.props.context.executeAction(navigateAction, {url: this._getPrevPath()});
+        this.props.context.executeAction(deckActions.loadUpdateTree, {deck: this.state.deckID, selector: {type: 'slide', id: this.state.previous.id, mode: this.state.selector.mode}} );
       }
       e.preventDefault();
     },
     _onNextClick: function(e) {
       if(this.state.next){
-        this.props.context.executeAction(navigateAction, {url: this._getNextPath()});
+        this.props.context.executeAction(deckActions.loadUpdateTree, {deck: this.state.deckID, selector: {type: 'slide', id: this.state.next.id, mode: this.state.selector.mode}} );
       }
       e.preventDefault();
     },
     _onLastClick: function() {
-      this.props.context.executeAction(navigateAction, {url: this._getLastPath()});
+      this.props.context.executeAction(deckActions.loadUpdateTree, {deck: this.state.deckID, selector: {type: 'slide', id: this.state.last.id, mode: this.state.selector.mode}} );
       e.preventDefault();
     },
     _onFirstClick: function() {
-      this.props.context.executeAction(navigateAction, {url: this._getFirstPath()});
+      this.props.context.executeAction(deckActions.loadUpdateTree, {deck: this.state.deckID, selector: {type: 'slide', id: this.state.first.id, mode: this.state.selector.mode}} );
       e.preventDefault();
     },
     _onFullscreenClick: function() {
@@ -96,15 +99,13 @@ var SliderControl = React.createClass({
       var deckID=this.state.deckID;
       //hide control if no current slide is defined!
         var prevElement="";
-        if(this.state.previous){
-          var prevPath=this._getPrevPath();
+        if(this.state.previous){         
           prevElement=<div className="ui button" onClick={this._onPrevClick} title="previous"><i className="caret left icon"></i> </div>;
         }else{
           prevElement=<div className="ui button"><i className="caret left icon disabled"></i></div>;
         }
         var nextElement="";
-        if(this.state.next){
-          var nextPath=this._getNextPath();
+        if(this.state.next){       
           nextElement=<div className="ui button" onClick={this._onNextClick} title="next"><i className="icon caret right"></i></div>;
         }else{
           nextElement=  <div className="ui button"><i className="icon caret right disabled"></i></div>;

@@ -13,32 +13,9 @@ var deckActions = require('../actions/DeckActions');
 
 
 var SlideEditor = React.createClass({
-  mixins: [StoreMixin],
-  statics: {
-    storeListeners: {
-      _onChange: [ContentStore]
-    }
-  },
-  getInitialState: function () {
-    return this.getStateFromStores();
-  },
-  getStateFromStores: function () {
-    return {
-      content_type: this.getStore(ContentStore).getContentType(),
-      content_id: this.getStore(ContentStore).getContentID(),
-      mode: this.getStore(ContentStore).getMode(),
-      theme_name: 'night'
-    };
-  },
-  _onChange: function() {
-    this.setState(this.getStateFromStores());
-  },
-  componentDidMount : function(){
-     //var $editor = $(this.getDOMNode()).wysiwyg({});
-    },
-    
+  
   render: function(){
-      return (<div><textarea id="sw-wysiwyg">This is SlideEditor</textarea></div>)
+      return (<div>This is SlideEditor for slide {this.props.id}</div>)
   }
 });
 

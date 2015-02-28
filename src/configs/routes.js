@@ -51,20 +51,21 @@ module.exports = {
             if (payload.params.stype && payload.params.sid) {
                 selector = {
                     type: payload.params.stype,
-                    id: payload.params.sid
+                    id: payload.params.sid,
+                    mode: mode
                 };
             } else {
                 selector = {
                     type: 'deck',
-                    id: payload.params.id
+                    id: payload.params.id,
+                    mode: mode
                 };
             }
             
             context.executeAction(deckActions.initializeDeckPage, {
 
                 deck: payload.params.id,
-                selector: selector,
-                mode: mode
+                selector: selector
             }, done);
 
         }

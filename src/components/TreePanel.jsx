@@ -23,6 +23,7 @@ var TreePanel = React.createClass({
        
     },
     getStateFromStores: function () {
+        
         return {
             error: this.getStore(TreeStore).getError(),
             item: this.getStore(TreeStore).getNodes(),
@@ -77,7 +78,7 @@ var TreePanel = React.createClass({
             parent_deck_id : parent.id
         };
         
-        this.props.context.executeAction(treeActions.addEmptySlide, {parent : parent, new_slide : new_slide});
+        this.props.context.executeAction(treeActions.addEmptySlide, {parent : parent, new_slide : new_slide, deck: this.state.item.id, selector: this.state.selector});
 
     },
     rememberOvered : function(overed){
@@ -146,13 +147,7 @@ var TreePanel = React.createClass({
               
        // }
     },
-    componentDidUpdate: function(prevProps, prevState){
-        console.log('treePanelUpdated');
-        //$(".sw-tree-view-selected").scrollIntoView();
-        if (prevState.selector.id.toString() != this.state.selector.id.toString() || prevState.selector.type.toString() != this.state.selector.type.toString()){
-            this.props.context.executeAction(navigateAction, {type: 'click', url: '/deck/' + this.state.item.id + '/' + this.state.selector.type + '/' + this.state.selector.id}); 
-        }
-    },
+    
     render: function() {
         
         var tree
@@ -205,12 +200,29 @@ var TreePanel = React.createClass({
         )
     },
     componentDidMount: function() {
-      //make the selected node visible in the view
-      $(".sw-tree-view-selected").scrollIntoView();
-
-    //    var payload = {deck:this.props.rootDeckID, mode: 'view', selector : {id :this.props.rootDeckID, type: 'deck'}};
-    //    this.props.context.executeAction(deckActions.loadUpdateTree, payload);
+        //make the selected node visible in the view
+        $(".sw-tree-view-selected").scrollIntoView();
+        //load in slider       
+        this.props.context.executeAction(navigateAction, 
+            {
+                type: 'click', 
+                url: '/deck/' + this.state.item.id + '/' + this.state.selector.type + '/' + this.state.selector.id +'/'+this.state.selector.mode
+            }); 
+        
       
+    },
+    componentDidUpdate: function(prevProps, prevState){
+        $(".sw-tree-view-selected").scrollIntoView();
+        if (prevState.selector.id.toString() != this.state.selector.id.toString() 
+                || prevState.selector.type.toString() != this.state.selector.type.toString() 
+                || prevState.selector.mode.toString() != this.state.selector.mode.toString()){
+           
+            this.props.context.executeAction(navigateAction, 
+                {
+                    type: 'click', 
+                    url: '/deck/' + this.state.item.id + '/' + this.state.selector.type + '/' + this.state.selector.id +'/'+this.state.selector.mode
+                }); 
+        }
     },
     
 });

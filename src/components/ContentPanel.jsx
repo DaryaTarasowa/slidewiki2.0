@@ -9,6 +9,7 @@ var ContentStore = require('../stores/ContentStore');
 var DeckPanel=require('./DeckPanel.jsx');
 var SlidePanel=require('./SlidePanel.jsx');
 var SlideEditor = require('./SlideEditor.jsx');
+var DeckEditor = require('./DeckEditor.jsx');
 var deckActions = require('../actions/DeckActions');
 
 var ContentPanel = React.createClass({
@@ -19,13 +20,23 @@ var ContentPanel = React.createClass({
     }
   },
   getInitialState: function () {
-    return this.getStateFromStores();
+      return {
+            content_type: 'deck',
+            content_id: this.getStore(ContentStore).getContentID(),
+            //mode: this.getStore(ContentStore).getMode(),
+            mode: 'view',
+            theme_name: 'night'
+        }
+      
   },
+  
   getStateFromStores: function () {
+      
     return {
       content_type: this.getStore(ContentStore).getContentType(),
       content_id: this.getStore(ContentStore).getContentID(),
       mode: this.getStore(ContentStore).getMode(),
+      //mode: 'view',
       theme_name: 'night'
     };
   },
@@ -58,7 +69,7 @@ var ContentPanel = React.createClass({
       switch(this.state.content_type){
       case 'deck':
         viewContent=<DeckPanel id={this.state.content_id} context={this.props.context} />;
-        editContent=<SlideEditor id={this.state.content_id} context={this.props.context} />;
+        editContent=<DeckEditor id={this.state.content_id} context={this.props.context} />;
         break;
       case 'slide':
         viewContent=<SlidePanel id={this.state.content_id} context={this.props.context} />;
@@ -123,7 +134,7 @@ var ContentPanel = React.createClass({
             <div className={editContentClasses}>
               <div className="ui segment">
                 <div className="ui segment color green">
-                    <SlideEditor id={this.state.content_id} context={this.props.context}/>
+                {editContent}
                 </div>
               </div>
             </div>

@@ -46,7 +46,7 @@ var DeckActions = {
                 context.dispatch('UPDATE_PAGE_TITLE', {
                     pageTitle: 'SlideWiki -- Deck ' + payload.deck + ' > ' +
                         payload.selector.type + ' : ' + payload.selector.id + ' | ' +
-                        payload.mode
+                        payload.selector.mode
                 });
                 done();
             }
@@ -94,7 +94,8 @@ var DeckActions = {
                     module.exports.updateSliderControl(context, {
                         selector: {
                             type: 'slide',
-                            id: payload.selector.id
+                            id: payload.selector.id,
+                            mode: payload.selector.mode
                         }
                     }, callback);
 
@@ -113,7 +114,7 @@ var DeckActions = {
                 context.dispatch('UPDATE_PAGE_TITLE', {
                     pageTitle: 'SlideWiki -- Deck ' + payload.deck + ' > ' +
                         payload.selector.type + ' : ' + payload.selector.id + ' | ' +
-                        payload.mode
+                        payload.selector.mode
                 });
                 done();
             }
@@ -121,9 +122,10 @@ var DeckActions = {
     },
 
     loadUpdateTree: function(context, payload, done){
+
         if (context.getStore(TreeStore).isAlreadyComplete(payload.deck)) {
             //only highlight node
-            console.log('update');
+
             context.executeAction(module.exports.updateTreeNodeSelector, {
                 deck: payload.deck,
                 selector: payload.selector
@@ -166,8 +168,7 @@ var DeckActions = {
     loadContainer: function(context, payload, done){
         //first need to prepare the right container for deck/slide/etc.
         context.executeAction(module.exports.prepareContentType, {
-            selector: payload.selector,
-            mode: payload.mode
+            selector: payload.selector
         }, function(res) {
           //then run the corresponding action
             switch (payload.selector.type) {
@@ -192,7 +193,7 @@ var DeckActions = {
     
     showDeck: function (context, payload, done) {
         context.dispatch('SHOW_DECK_START', payload);
-        var object = {selector: {type: payload.selector.type, id:payload.selector.id}};
+        var object = {selector: {type: payload.selector.type, id:payload.selector.id, mode: payload.selector.mode}};
         context.service.read('deck.content', object, {}, function (err, res) {
             if (err) {
                 context.dispatch('SHOW_DECK_FAILURE', err);
@@ -206,7 +207,7 @@ var DeckActions = {
     
     showSlide: function (context, payload, done) {
         context.dispatch('SHOW_SLIDE_START', payload);
-        var object = {selector: {type: payload.selector.type, id:payload.selector.id}};
+        var object = {selector: {type: payload.selector.type, id:payload.selector.id, mode: payload.selector.mode}};
         context.service.read('deck.content', object, {}, function (err, res) {
             if (err) {
                 context.dispatch('SHOW_SLIDE_FAILURE', err);
@@ -230,7 +231,24 @@ var DeckActions = {
             done(null);
         });
     },
-    
+    forceLoadSlides : function(context, payload, done){
+        console.log('force');
+        if (payload.selector.type === 'slide') {
+            //reload slides list
+            context.executeAction(module.exports.showSliderControl, {
+                  deck: payload.deck,
+                  selector: {
+                      type: 'slide',
+                      id: payload.selector.id,
+                      mode: payload.selector.mode
+                  }
+            }, done);
+            
+        } else {
+            //hide slider control
+            context.executeAction(module.exports.hideSliderControl, {}, done);
+        }
+    },
     loadSlides : function(context, payload, done){  
         
         if (payload.selector.type === 'slide') {
@@ -241,7 +259,8 @@ var DeckActions = {
                 context.executeAction(module.exports.updateSliderControl, {
                     selector: {
                         type: 'slide',
-                        id: payload.selector.id
+                        id: payload.selector.id,
+                        mode: payload.selector.mode
                     }
                 }, done);
             } else {
@@ -251,7 +270,8 @@ var DeckActions = {
                     deck: payload.deck,
                     selector: {
                         type: 'slide',
-                        id: payload.selector.id
+                        id: payload.selector.id,
+                        mode: payload.selector.mode
                     }
               }, done);
             }
@@ -307,10 +327,11 @@ var DeckActions = {
     },
     
     updateTitle: function(context, payload, done){
+        
         context.dispatch('UPDATE_PAGE_TITLE', {
             pageTitle: 'SlideWiki -- Deck ' + payload.deck + ' > ' +
                 payload.selector.type + ' : ' + payload.selector.id + ' | ' +
-                payload.mode
+                payload.selector.mode
         });
         done();
     },

@@ -11,8 +11,23 @@ exports.deleteFrom = function(context, payload, done){
 };
 
 exports.addEmptySlide = function(context, payload, done){
-    context.dispatch('ADD_EMPTY_SLIDE', payload);
-    done();
+    context.dispatch('ADD_EMPTY_SLIDE', payload); 
+//    if (payload.selector.type === 'slide') {
+//            //reload slides list
+//            console.log('slide');
+//            context.executeAction(deckActions.showSliderControl, {
+//                  deck: payload.deck,
+//                  selector: {
+//                      type: 'slide',
+//                      id: payload.selector.id
+//                  }
+//            }, done);
+//            
+//        } else {
+//            //hide slider control
+//            context.executeAction(deckActions.hideSliderControl, {}, done);
+//        }
+    //context.executeAction(deckActions.forceLoadSlides, {deck:payload.deck, selector: {type: payload.selector.type, id: payload.selector.id}}, done);
 };
 
 exports._onDragStart = function(context, payload, done){
