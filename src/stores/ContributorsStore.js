@@ -11,6 +11,7 @@ module.exports = createStore({
   },
   initialize: function () {
     this.contributors=[];
+    this.selector = {};
   },
   _showContributorsStart: function (res) {
     //console.log('Start loading contributors...');
@@ -21,16 +22,20 @@ module.exports = createStore({
     this.emitChange();
   },
   _showContributorsSuccess: function (res) {
-    this.contributors=res.contributors;
+    this.contributors = res.contributors;
+    this.selector = res.selector;
     this.emitChange();
   },
-  isAlreadyComplete: function() {
-    if (this.contributors.length) {
-      //not empty
-      return true;
-    } else {
-      return false;
-    }
+  isAlreadyComplete: function(selector) {
+      
+      if (this.selector){
+          if (this.contributors.length && selector.id === this.selector.id && selector.type === this.selector.type) {
+            //not empty
+            return true;
+          } else {
+            return false;
+          }
+      }    
   },
   getContributors: function () {
     return this.contributors;
@@ -41,10 +46,12 @@ module.exports = createStore({
   dehydrate: function () {
     return {
       contributors: this.contributors,
+      selector: this.selector
     };
   },
   rehydrate: function (state) {
     this.contributors = state.contributors;
+    this.selector = state.selector;
   }
   
 });

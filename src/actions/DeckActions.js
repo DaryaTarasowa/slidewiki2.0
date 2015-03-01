@@ -4,9 +4,9 @@ var TreeStore = require('../stores/TreeStore');
 var DeckSliderStore = require('../stores/DeckSliderStore');
 var ContributorsStore = require('../stores/ContributorsStore');
 var DeckStore = require('../stores/DeckStore');
+var SlideStore = require('../stores/SlideStore');
 var treeActions = require('../actions/TreeActions');
-var showContributors = require('../actions/showContributors');
-var showSliderControl = require('../actions/showSliderControl');
+
 
 var DeckActions = {
     initializeDeckPage: function(context, payload, done){
@@ -52,74 +52,7 @@ var DeckActions = {
             }
         });
     },
-    updateDeckPage: function(context, payload, done) {
-        async.parallel([
-            //only highlight a node when tree is already rendered
-            function(callback) {
-               
-               treeActions._updateSelector(context, payload, callback);
-            },
-            ////////////////////////////////////
-            //load content for deck/slide
-            function(callback) {                
-              //first need to prepare the right container for deck/slide/etc.
-                module.exports.prepareContentType(context, payload, function(res) {
-                  //then run the corresponding action
-                    
-                    switch (payload.selector.type) {
-                        case 'deck':
-                            context.executeAction(module.exports.showDeck, payload, callback);
-                            break;
-                        case 'slide':
-                            
-                            context.executeAction(module.exports.showSlide, payload, callback);
-                            break;
-                    }
-                });
-            },
-            ////////////////////////////////////
-            //Update contributors
-            function(callback) {
-                var object = {selector: {type: payload.selector.type, id:payload.selector.id}};
-                module.exports.showContributors(context, object, callback);
-            },
-
-            ////////////////////////////////////
-            //TODO: this parallel action might be dependent on the showSlide action. we should check this later.
-            //load slides for slider
-            function(callback) {
-           
-                if (payload.selector.type === 'slide') {
-                    //there is no need to load slides list
-                    module.exports.updateSliderControl(context, {
-                        selector: {
-                            type: 'slide',
-                            id: payload.selector.id,
-                            mode: payload.selector.mode
-                        }
-                    }, callback);
-
-                } else {
-                    //hide slider control
-                    module.exports.hideSliderControl(context, {}, callback);
-                }
-            }
-          ////////////////////////////////////
-        ],
-        // optional callback
-        function(err, results) {
-            
-            if (!err) {
-                
-                context.dispatch('UPDATE_PAGE_TITLE', {
-                    pageTitle: 'SlideWiki -- Deck ' + payload.deck + ' > ' +
-                        payload.selector.type + ' : ' + payload.selector.id + ' | ' +
-                        payload.selector.mode
-                });
-                done();
-            }
-        });
-    },
+    
 
     loadUpdateTree: function(context, payload, done){
 
@@ -171,16 +104,19 @@ var DeckActions = {
             selector: payload.selector
         }, function(res) {
           //then run the corresponding action
+            
             switch (payload.selector.type) {
                 case 'deck':
+                    if (context.getStore(DeckStore).id !== payload.selector.id ){
                     context.executeAction(module.exports.showDeck, {
                         selector: payload.selector
-                    }, done);
+                    }, done);}
                     break;
                 case 'slide':
+                    if (context.getStore(SlideStore).id !== payload.selector.id ){
                     context.executeAction(module.exports.showSlide, {
                         selector: payload.selector
-                    }, done);
+                    }, done);}
                     break;
             }
         });
@@ -220,16 +156,20 @@ var DeckActions = {
     },
     
     showContributors: function (context, payload, done) {
-        context.dispatch('SHOW_CONTRIBUTORS_START', payload);
-        context.service.read('deck.contributors', payload, {}, function (err, res) {
-            if (err) {
-                context.dispatch('SHOW_CONTRIBUTORS_FAILURE', err);
-                done();
-                return;
-            }
-            context.dispatch('SHOW_CONTRIBUTORS_SUCCESS', res);
-            done(null);
-        });
+        var selector = {type: payload.selector.type, id:payload.selector.id};
+        if (!context.getStore(ContributorsStore).isAlreadyComplete(selector)){
+            context.dispatch('SHOW_CONTRIBUTORS_START', payload);
+            context.service.read('deck.contributors', payload, {}, function (err, res) {
+                if (err) {
+                    context.dispatch('SHOW_CONTRIBUTORS_FAILURE', err);
+                    done();
+                    return;
+                }
+                res.selector = selector;
+                context.dispatch('SHOW_CONTRIBUTORS_SUCCESS', res);
+                done(null);
+            });
+        }        
     },
     forceLoadSlides : function(context, payload, done){
         console.log('force');

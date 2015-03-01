@@ -1,5 +1,5 @@
 //actions used by the routes
-var initializeDeckPage = require('../actions/initializeDeckPage');
+
 var deckActions = require('../actions/DeckActions');
 var TreeStore = require('../stores/TreeStore');
 
@@ -61,7 +61,10 @@ module.exports = {
                     mode: mode
                 };
             }
-            
+            context.dispatch('UPDATE_PAGE_TITLE', {
+              pageTitle: 'SlideWiki | About'
+            });
+           
             context.executeAction(deckActions.initializeDeckPage, {
 
                 deck: payload.params.id,

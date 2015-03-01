@@ -7,7 +7,7 @@ var ContributorsPanel = require('./ContributorsPanel.jsx');
 var SliderControl = require('./SliderControl.jsx');
 var DeckNewsFeed = require('./DeckNewsFeed.jsx');
 var deckActions = require('../actions/DeckActions');
-var initialize = require('../actions/initializeDeckPage');
+
 var async = require('async');
 
 var DeckPage = React.createClass({

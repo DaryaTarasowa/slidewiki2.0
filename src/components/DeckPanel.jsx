@@ -8,7 +8,6 @@ var ApplicationStore = require('../stores/ApplicationStore'); //for loading lang
 var DeckView=require('./DeckView.jsx');
 var deckActions= require('../actions/DeckActions');
 var treeActions= require('../actions/TreeActions');
-var initializeDeckPage = require('../actions/initializeDeckPage');
 var navigateAction = require('flux-router-component/actions/navigate');
 
 var DeckPanel = React.createClass({

@@ -6,7 +6,7 @@ var TreeStore = require('../stores/TreeStore');
 var deckActions = require('../actions/DeckActions');
 var treeActions = require('../actions/TreeActions');
 var TreeNodes = require('./TreeNodes.jsx');
-var updateSliderControl = require('../actions/updateSliderControl');
+
 var update = require('react/lib/update');
 var navigateAction = require('flux-router-component/actions/navigate');
 
