@@ -41,7 +41,7 @@ var Nav = React.createClass({
             
         return (
             <div>
-                <div id="main_navbar"  className="menu inverted navbar ui grid page computer only tablet only">
+                <div id="main_navbar"  className="menu inverted navbar ui grid page computer only tablet only" >
 
                     <a href="/" className="brand item">SlideWiki</a>
                    {linkHTML}
@@ -53,8 +53,8 @@ var Nav = React.createClass({
                 <nav id="main_navbar"  className="menu ui grid page mobile only inverted">
                         <a href="/" className="brand item">SlideWiki</a>
                   
-                        <div className="ui dropdown floating icon tiny item inverted" onClick={this.openCloseNav}>
-                            <i className="content icon" ref="menu_icon"></i>
+                        <div className="ui dropdown floating icon tiny item inverted">
+                            <div onClick={this.openCloseNav}><i className="content icon" ref="menu_icon"></i></div>
                             <div className="menu vertical ui small inverted" ref="menu" style={{display: this.state.navOpen ? 'block' : 'none'}}>
                                  {linkHTML}
                             </div>
