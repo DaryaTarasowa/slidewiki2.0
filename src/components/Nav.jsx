@@ -51,9 +51,9 @@ var Nav = React.createClass({
                 <nav id="main_navbar"  className="menu navbar ui grid page mobile only inverted">
                     <a className="brand item">SlideWiki</a>
                     <div className="ui item">
-                        <div className="ui dropdown floating icon tiny inverted">
+                        <div className="ui dropdown green floating icon tiny">
                             <i className="content icon" ref="menu_icon" onClick={this.openCloseNav}></i>
-                            <div className="menu vertical ui small inverted" ref="menu" style={{display: this.state.navOpen ? 'block' : 'none'}}>
+                            <div className="menu vertical ui small yellow inverted" ref="menu" style={{display: this.state.navOpen ? 'block' : 'none'}}>
                                  {linkHTML}
                             </div>
                         </div>
