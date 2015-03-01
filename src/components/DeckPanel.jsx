@@ -10,6 +10,9 @@ var deckActions= require('../actions/DeckActions');
 var treeActions= require('../actions/TreeActions');
 var navigateAction = require('flux-router-component/actions/navigate');
 
+
+
+
 var DeckPanel = React.createClass({
     mixins: [StoreMixin],
     statics: {
@@ -67,6 +70,9 @@ var DeckPanel = React.createClass({
         var self = this;
         var isGoogleFormOpened = this.state.googleFormOpened;
         var languageList;
+        
+        
+        
         if (this.state.googleLanguages.length){
             languageList = this.state.googleLanguages.map(function(node, index){
             return (

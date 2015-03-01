@@ -34,8 +34,7 @@ var DefaultLayout = React.createClass({
             <script src="/public/bower_components/reveal.js/js/reveal.js" defer></script>
             <script src="/public/js/bundle.js" defer></script>
             <script src="/public/bower_components/reveal.js/lib/js/head.min.js" defer></script>
-            <script src="/public/bower_components/wysiwyg.js/src/wysiwyg-editor.js" defer></script>
-            <script src="/public/bower_components/wysiwyg.js/src/wysiwyg.js" defer></script>
+
             </html>
         );
     }
