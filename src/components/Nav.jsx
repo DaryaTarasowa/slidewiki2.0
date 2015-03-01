@@ -30,34 +30,36 @@ var Nav = React.createClass({
                     className += ' active';
                   }
                   return (
-                    <div className={className} key={link.path}>
-                      <NavLink routeName={link.page} context={context} href={link.path}>{link.label}</NavLink>
-                    </div>
+                            <div className={className}>
+                                <div key={link.path}>
+                                    <NavLink routeName={link.page} context={context} href={link.path}>{link.label}</NavLink>
+                                </div>
+                            </div>
                   );
                 }
             });
             
         return (
             <div>
-                <nav id="main_navbar"  className="menu inverted navbar ui grid page computer only tablet only">
+                <div id="main_navbar"  className="menu inverted navbar ui grid page computer only tablet only">
 
                     <a href="/" className="brand item">SlideWiki</a>
                    {linkHTML}
                     <UserMenu context={context} />
 
-                </nav>
+                </div>
 
                 
-                <nav id="main_navbar"  className="menu navbar ui grid page mobile only inverted">
-                    <a className="brand item">SlideWiki</a>
-                    <div className="ui item">
-                        <div className="ui dropdown green floating icon tiny">
-                            <i className="content icon" ref="menu_icon" onClick={this.openCloseNav}></i>
-                            <div className="menu vertical ui small yellow inverted" ref="menu" style={{display: this.state.navOpen ? 'block' : 'none'}}>
+                <nav id="main_navbar"  className="menu ui grid page mobile only inverted">
+                        <a href="/" className="brand item">SlideWiki</a>
+                  
+                        <div className="ui dropdown floating icon tiny item inverted" onClick={this.openCloseNav}>
+                            <i className="content icon" ref="menu_icon"></i>
+                            <div className="menu vertical ui small inverted" ref="menu" style={{display: this.state.navOpen ? 'block' : 'none'}}>
                                  {linkHTML}
                             </div>
                         </div>
-                    </div>
+                  
                     <UserMenu context={context} />
                 </nav>
                    
@@ -111,10 +113,11 @@ var Dropdown = React.createClass({
         var self  = this;
         var style = {"zIndex" : "1000 !important"};
     return (
-        <div className="ui dropdown simple inverted" style={style}>                        
+           
+        <div className="ui dropdown simple inverted " style={style}>                        
             {this.props.user.username}<i className="dropdown icon"></i>
-            <div className="menu ui inverted" style={style}>
-                <div className = "item"><a onClick={self._handleLogout}>Logout</a></div>
+            <div className="menu vertical ui small inverted" style={style}>
+                <div className = "item" onClick={self._handleLogout}><div><a>Logout</a></div></div>
             </div>
         </div>
     )}
@@ -129,7 +132,7 @@ var LoginButton = React.createClass({
         var self = this;
         var style = {cursor : 'pointer'};
        
-        var login = this.props.isLoggedIn ? null : <a style={style} onClick={self._handleOpenCloseForm} > Login </a>
+        var login = this.props.isLoggedIn ? null : <a  style={style} onClick={self._handleOpenCloseForm} > Login </a>
         
         return (
             <div>
