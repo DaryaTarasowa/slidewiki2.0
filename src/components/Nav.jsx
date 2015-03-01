@@ -10,8 +10,12 @@ var Nav = React.createClass({
     getInitialState: function () {
         return {
             selected: 'home',
-            links: {}
+            links: {},
+            navOpen: false
         };
+    },
+    openCloseNav: function(){        
+        this.setState({navOpen : !this.state.navOpen});
     },
     render: function() {
         var selected = this.props.selected.name || this.state.selected.name,
@@ -34,15 +38,30 @@ var Nav = React.createClass({
             });
             
         return (
-          
-          <nav id="main_navbar"  className="menu inverted navbar ui grid page">
-            
-                <a href="/" className="brand item">SlideWiki</a>
-                {linkHTML}
-                <UserMenu context={context} />
-          
-          </nav>
-      
+            <div>
+                <nav id="main_navbar"  className="menu inverted navbar ui grid page computer only tablet only">
+
+                    <a href="/" className="brand item">SlideWiki</a>
+                   {linkHTML}
+                    <UserMenu context={context} />
+
+                </nav>
+
+                
+                <nav id="main_navbar"  className="menu navbar ui grid page mobile only inverted">
+                    <a className="brand item">SlideWiki</a>
+                    <div className="ui item">
+                        <div className="ui dropdown floating icon tiny inverted">
+                            <i className="content icon" ref="menu_icon" onClick={this.openCloseNav}></i>
+                            <div className="menu vertical ui small inverted" ref="menu" style={{display: this.state.navOpen ? 'block' : 'none'}}>
+                                 {linkHTML}
+                            </div>
+                        </div>
+                    </div>
+                    <UserMenu context={context} />
+                </nav>
+                   
+            </div>
         );
     }
 });

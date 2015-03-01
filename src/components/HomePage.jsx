@@ -21,7 +21,7 @@ var HomePage = React.createClass({
               </div>
             </div>
             <div className="ui hidden divider"></div>
-            <div className="ui page grid">
+            <div className="ui page grid  stackable">
               <div className="three column row">
                 <div className="column">
                   <h2 className="ui header">Features</h2>

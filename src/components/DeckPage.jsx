@@ -28,7 +28,7 @@ var DeckPage = React.createClass({
       }
         return (
                 
-          <div className="ui vertically padded grid page ">
+          <div className="ui vertically padded grid page doubling stackable">
           
             <div className="row">
               <div className="column">
@@ -37,10 +37,13 @@ var DeckPage = React.createClass({
             </div>
 
             <div className="ui hidden divider"></div>
-
+           
+                <div className="ui left vertical sidebar mobile only">
+                    <TreePanel context={this.props.context} rootDeckID={this.props.deckParams.id}/>
+                </div>
             <div className="row">
 
-              <div className="four wide column">
+              <div className="four wide column computer only tablet only">
                 <TreePanel context={this.props.context} rootDeckID={this.props.deckParams.id}/>
               </div>
 

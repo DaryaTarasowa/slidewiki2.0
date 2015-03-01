@@ -32,30 +32,24 @@ var DeckEditor = React.createClass({
     _onChange: function() {
       this.setState(this.getStateFromStores());
     },
-    _handleChangeDesc: function(e){
+    _handleChange: function(field, e){
         var content = this.state.content;
-        content.description = e.target.value;
+        content[field] = e.target.value;
         this.setState({content : content});
     },
-    _handleChangeOrigin: function(e){
-        var content = this.state.content;
-        content.origin = e.target.value;
-        this.setState({content : content});
-    },
+    
   render: function(){
       var description = this.state.content.description || 'Provide description...';
       var origin = this.state.content.origin;
+      var self = this;
       return (
             
             <form className="ui form">
                 <div className="field">
                     <label>Abstract</label>
-                    <textarea value={description} onChange = {this._handleChangeDesc}></textarea>
+                    <textarea value={description} onChange = {self._handleChange.bind(this, 'description')}></textarea>
                 </div>
-                <div className="field">
-                    <label>Origin</label>
-                    <textarea value={origin} onChange = {this._handleChangeOrigin}></textarea>
-                </div>
+                
             </form>
        
      

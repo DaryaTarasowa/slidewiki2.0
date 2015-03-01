@@ -87,9 +87,9 @@ var DeckPanel = React.createClass({
                 <div className="sw-deck-panel">
                     <div className="panel" >
                         <div className="ui secondary top yellow attached segment grid">
-                            <div className="nine wide column left floated left aligned">
-                                <div>{this.state.content.title}</div>
-                            </div>
+                          
+                            <div className="header eight wide column left floated left aligned">{this.state.content.title}</div>
+                         
                             <div className="five wide column right floated right aligned">
                                 <div className="ui floating dropdown button right labeled compact icon tiny yellow fluid">
                                     <span className="text">{this.state.content.language}</span>

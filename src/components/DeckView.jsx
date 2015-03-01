@@ -10,8 +10,10 @@ var DeckView = React.createClass({
     render: function() {
         var date = new Date(this.props.content.created_at);
         var created_at;
-        var created_at = dateFormat(date, 'dd mmm yyyy');
-        console.log(this.props.content);
+        if (date){
+            try{created_at = dateFormat(date, 'dd mmm yyyy');}
+            catch(err){created_at = null;}
+        }
         return (
         <div className=" ui segment">
             <h6 className="ui horizontal divider">
