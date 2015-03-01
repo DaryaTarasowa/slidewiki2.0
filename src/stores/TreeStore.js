@@ -340,7 +340,6 @@ module.exports = createStore({
     },
     _updateSelector: function(res) {
         var self = this;
-        
         if (res.selector.id.toString() !== this.selector.id.toString() || res.selector.type.toString() !== this.selector.type.toString()){
             
             this.selector = res.selector;
@@ -363,6 +362,7 @@ module.exports = createStore({
         }else{
             if (res.selector.mode.toString() !== this.selector.mode.toString()){
                 this.selector = res.selector;
+                this.emitChange();
             }
         }
         

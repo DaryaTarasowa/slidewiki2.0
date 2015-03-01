@@ -61,9 +61,6 @@ module.exports = {
                     mode: mode
                 };
             }
-            context.dispatch('UPDATE_PAGE_TITLE', {
-              pageTitle: 'SlideWiki | About'
-            });
            
             context.executeAction(deckActions.initializeDeckPage, {
 

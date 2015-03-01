@@ -23,7 +23,6 @@ var TreePanel = React.createClass({
        
     },
     getStateFromStores: function () {
-        
         return {
             error: this.getStore(TreeStore).getError(),
             item: this.getStore(TreeStore).getNodes(),
@@ -213,15 +212,17 @@ var TreePanel = React.createClass({
     },
     componentDidUpdate: function(prevProps, prevState){
         $(".sw-tree-view-selected").scrollIntoView();
+        console.log(this.state.selector);
         if (prevState.selector.id.toString() != this.state.selector.id.toString() 
-                || prevState.selector.type.toString() != this.state.selector.type.toString() 
-                || prevState.selector.mode.toString() != this.state.selector.mode.toString()){
-           
+            || prevState.selector.type.toString() != this.state.selector.type.toString() 
+            || prevState.selector.mode.toString() != this.state.selector.mode.toString()){
+
+
             this.props.context.executeAction(navigateAction, 
-                {
-                    type: 'click', 
-                    url: '/deck/' + this.state.item.id + '/' + this.state.selector.type + '/' + this.state.selector.id +'/'+this.state.selector.mode
-                }); 
+            {
+                type: 'click', 
+                url: '/deck/' + this.state.item.id + '/' + this.state.selector.type + '/' + this.state.selector.id +'/'+this.state.selector.mode
+            }); 
         }
     },
     

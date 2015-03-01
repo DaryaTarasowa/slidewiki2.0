@@ -178,6 +178,7 @@ var TreeNodes = React.createClass({
         
         
         this.props.context.executeAction(deckActions.loadUpdateTree, 
+        
             {
                 deck: this.props.rootID, 
                 selector: {

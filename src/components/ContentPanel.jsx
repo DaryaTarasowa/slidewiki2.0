@@ -5,6 +5,7 @@ var navigateAction = require('flux-router-component/actions/navigate');
 var StoreMixin = require('fluxible').Mixin;
 //stores
 var ContentStore = require('../stores/ContentStore');
+var TreeStore = require('../stores/TreeStore');
 //SlideWiki components
 var DeckPanel=require('./DeckPanel.jsx');
 var SlidePanel=require('./SlidePanel.jsx');
@@ -13,48 +14,52 @@ var DeckEditor = require('./DeckEditor.jsx');
 var deckActions = require('../actions/DeckActions');
 
 var ContentPanel = React.createClass({
-  mixins: [StoreMixin],
-  statics: {
-    storeListeners: {
-      _onChange: [ContentStore]
-    }
-  },
-  getInitialState: function () {
+    mixins: [StoreMixin],
+    statics: {
+      storeListeners: {
+        _onChange: [ContentStore, TreeStore]
+      }
+    },
+    getInitialState: function () {
+        return {
+              content_type: 'deck',
+              content_id: this.getStore(ContentStore).getContentID(),
+              mode: this.getStore(TreeStore).getSelector().mode,
+              theme_name: 'night'
+          }
+
+    },
+
+    getStateFromStores: function () {
       return {
-            content_type: 'deck',
-            content_id: this.getStore(ContentStore).getContentID(),
-            //mode: this.getStore(ContentStore).getMode(),
-            mode: 'view',
-            theme_name: 'night'
-        }
-      
-  },
-  
-  getStateFromStores: function () {
-      
-    return {
-      content_type: this.getStore(ContentStore).getContentType(),
-      content_id: this.getStore(ContentStore).getContentID(),
-      mode: this.getStore(ContentStore).getMode(),
-      //mode: 'view',
-      theme_name: 'night'
-    };
-  },
-  _onChange: function() {
-    this.setState(this.getStateFromStores());
-  },
-  _onTabClick: function(mode, e) {
-    this.props.context.executeAction(navigateAction, {type: 'click', url: this._getTabPath(mode)});
-    e.preventDefault();
-  },
-  _getTabPath: function(mode) {
-    return '/deck/'+this.props.rootDeckID+'/'+this.state.content_type + '/' + this.state.content_id + '/'+ mode;
-  },
+        content_type: this.getStore(ContentStore).getContentType(),
+        content_id: this.getStore(ContentStore).getContentID(),
+        mode: this.getStore(TreeStore).getSelector().mode,
+        theme_name: 'night'
+      };
+    },
+    _onChange: function() {
+
+        this.setState(this.getStateFromStores());
+    },
+    _onTabClick: function(mode, e) {
+        this.props.context.executeAction(deckActions.loadUpdateTree, 
+            {
+                deck: this.props.rootDeckID, 
+                selector: {
+                    type: this.state.content_type,
+                    id: this.state.content_id,
+                    mode: mode
+                }
+            } );
+        e.preventDefault();
+    },
+ 
   startShow : function(){
       this.props.context.executeAction(navigateAction, {type: 'click', url : '/play/'+this.props.rootDeckID+'/' + this.state.theme_name});
   },
     render: function() {
-      var viewTabPath=this._getTabPath('view');
+      
       var viewTabClasses = cx({
         'item': true,
         'active': this.state.mode=='view'
@@ -77,7 +82,7 @@ var ContentPanel = React.createClass({
         break;
       }
 
-      var editTabPath=this._getTabPath('edit');
+    
       var editTabClasses = cx({
         'item': true,
         'active': this.state.mode=='edit'
@@ -93,10 +98,10 @@ var ContentPanel = React.createClass({
         return (
           <div className="sw-content-panel">
             <div className="ui top attached tabular menu">
-              <a href={viewTabPath} className={viewTabClasses} onClick={this._onTabClick.bind(this, 'view')}>
+              <a  className={viewTabClasses} onClick={this._onTabClick.bind(this, 'view')}>
                 View
               </a>
-              <a href={editTabPath} className={editTabClasses} onClick={this._onTabClick.bind(this, 'edit')}>
+              <a  className={editTabClasses} onClick={this._onTabClick.bind(this, 'edit')}>
                 Edit
               </a>
               <a className="item">
