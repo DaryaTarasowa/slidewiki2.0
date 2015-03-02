@@ -1,22 +1,57 @@
 'use strict';
 var React = require('react');
-var cx = require('react/lib/cx');
+var SlideStore = require('../stores/SlideStore');
 var navigateAction = require('flux-router-component/actions/navigate');
 var StoreMixin = require('fluxible').Mixin;
-//stores
-var ContentStore = require('../stores/ContentStore');
 //SlideWiki components
-
-var SlidePanel=require('./SlidePanel.jsx');
-var SlideEditor = require('./SlideEditor.jsx');
-var deckActions = require('../actions/DeckActions');
-
+var ContentMenu = require('./ContentMenu.jsx');
+var TranslationButton = require('./TranslationButton.jsx');
 
 var SlideEditor = React.createClass({
-  
-  render: function(){
-      return (<div>This is SlideEditor for slide {this.props.id}</div>)
-  }
+    mixins: [StoreMixin],
+    statics: {
+      storeListeners: {
+        _onChange: [SlideStore]
+      }
+    },
+    getInitialState: function () {
+      return this.getStateFromStores();
+    },
+    getStateFromStores: function () {
+      return {
+        content: this.getStore(SlideStore).getContent(),
+      };
+    },
+    _onChange: function() {
+      this.setState(this.getStateFromStores());
+    },
+    render: function() {
+        return (
+                <div className="sw-slide-panel">
+                    <div className="panel">
+                        <div className="ui top secondary blue attached segment">
+                            <h3 className="ui header">
+                                <div className="content">
+                                    {this.state.content.title}
+                                </div>
+                            </h3>
+                            <TranslationButton context = {this.props.context} content={this.state.content}/>
+                        </div>
+                        <ContentMenu startShow = {this.startShow} />
+                        <div className="ui bottom attached segment">
+                            <div className="sw-slide" id="sw_slide">
+                                <div className="ui segment">
+                                    <div>WYSIWYG goes here</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+       
+          
+        );
+    }
 });
 
 module.exports = SlideEditor;
+
