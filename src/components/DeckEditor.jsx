@@ -7,7 +7,7 @@ var StoreMixin = require('fluxible').Mixin;
 var ContentStore = require('../stores/ContentStore');
 var DeckStore = require('../stores/DeckStore');
 //SlideWiki components
-var DeckPanel=require('./DeckPanel.jsx');
+
 var SlidePanel=require('./SlidePanel.jsx');
 var SlideEditor = require('./SlideEditor.jsx');
 var deckActions = require('../actions/DeckActions');

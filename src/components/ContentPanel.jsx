@@ -12,22 +12,18 @@ var SlidePanel=require('./SlidePanel.jsx');
 var SlideEditor = require('./SlideEditor.jsx');
 var DeckEditor = require('./DeckEditor.jsx');
 var deckActions = require('../actions/DeckActions');
+var DeckStore = require('../stores/DeckStore');
+var ApplicationStore = require('../stores/ApplicationStore'); //for loading languages list
 
 var ContentPanel = React.createClass({
     mixins: [StoreMixin],
     statics: {
       storeListeners: {
-        _onChange: [ContentStore, TreeStore]
+        _onChange: [ContentStore, TreeStore, DeckStore, ApplicationStore]
       }
     },
     getInitialState: function () {
-        return {
-              content_type: 'deck',
-              content_id: this.getStore(ContentStore).getContentID(),
-              mode: this.getStore(TreeStore).getSelector().mode,
-              theme_name: 'night'
-          }
-
+        return this.getStateFromStores();
     },
 
     getStateFromStores: function () {
@@ -35,7 +31,8 @@ var ContentPanel = React.createClass({
         content_type: this.getStore(ContentStore).getContentType(),
         content_id: this.getStore(ContentStore).getContentID(),
         mode: this.getStore(TreeStore).getSelector().mode,
-        theme_name: 'night'
+        theme_name: 'night',
+
       };
     },
     _onChange: function() {
@@ -55,9 +52,9 @@ var ContentPanel = React.createClass({
         e.preventDefault();
     },
  
-  startShow : function(){
+    startShow : function(){
       this.props.context.executeAction(navigateAction, {type: 'click', url : '/play/'+this.props.rootDeckID+'/' + this.state.theme_name});
-  },
+    }, 
     render: function() {
       
       var viewTabClasses = cx({
@@ -93,57 +90,28 @@ var ContentPanel = React.createClass({
         'panel': true,
         'sw-hidden': this.state.mode!='edit'
       });
-      
-      
+     
         return (
-          <div className="sw-content-panel">
-            <div className="ui top attached tabular menu">
-              <a  className={viewTabClasses} onClick={this._onTabClick.bind(this, 'view')}>
-                View
-              </a>
-              <a  className={editTabClasses} onClick={this._onTabClick.bind(this, 'edit')}>
-                Edit
-              </a>
-              <a className="item">
-              Questions<span className="ui tiny label">12</span>
-              </a>
-              <div className="item">
-                <a title="Comments">
-                    <i className="comments red large icon"></i><span>5</span>
-                </a>
-              </div>
-              <div className="item">
-                <a title="download">
-                  <i className="download icon"></i>
-                </a>
-                <a title="print">
-                  <i className="print icon"></i>
-                </a>
-                <a title="export">
-                  <i className="share external icon"></i>
-                </a>
-                <a title="share">
-                  <i className="share alternate icon"></i>
-                </a>
-              </div>
-              <div className="ui right labeled compact icon button green" onClick={this.startShow}>
-                <i className="right play icon"></i>
-                Play
-              </div>
-            </div>
-            <div className={viewContentClasses}>
-              <div className="ui segment">
-                {viewContent}
-              </div>
-            </div>
-            <div className={editContentClasses}>
-              <div className="ui segment">
-                <div className="ui segment color green">
-                {editContent}
+            <div className="sw-content-panel">
+
+                <div className="ui top attached tabular menu">
+                    <a  className={viewTabClasses} onClick={this._onTabClick.bind(this, 'view')}>
+                        View
+                    </a>
+                    <a  className={editTabClasses} onClick={this._onTabClick.bind(this, 'edit')}>
+                        Edit
+                    </a>
+                </div>  
+
+                <div className={viewContentClasses}>
+                    {viewContent}
                 </div>
-              </div>
+                <div className={editContentClasses}>
+                    <div className="ui segment color green">
+                        {editContent}
+                  </div>
+                </div>
             </div>
-          </div>
         );
     },
     //componentDidMount: function() {
