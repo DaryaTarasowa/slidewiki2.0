@@ -52,9 +52,7 @@ var ContentPanel = React.createClass({
         e.preventDefault();
     },
  
-    startShow : function(){
-      this.props.context.executeAction(navigateAction, {type: 'click', url : '/play/'+this.props.rootDeckID+'/' + this.state.theme_name});
-    }, 
+    
     render: function() {
       
       var viewTabClasses = cx({
