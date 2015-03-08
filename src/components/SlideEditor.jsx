@@ -6,7 +6,6 @@ var StoreMixin = require('fluxible').Mixin;
 //SlideWiki components
 var ContentMenu = require('./ContentMenu.jsx');
 var TranslationButton = require('./TranslationButton.jsx');
-var Highlight = require('react-highlight');
 
 
 
@@ -49,10 +48,6 @@ var SlideEditor = React.createClass({
                 }
         });
         var element = this.refs.wysiwyg.getDOMNode(); //must be called 'element!!!'
-        
-            
-        
-        
         $(element).wysiwyg({
             classes: 'buttons small compact icon sw-force-blue',
             // 'selection'|'top'|'top-selection'|'bottom'|'bottom-selection'
@@ -334,22 +329,23 @@ var SlideEditor = React.createClass({
             
 
 
-).bind('blur keyup paste copy cut mouseup', function () {
-            var content = $(this).html().trim();
-            var old_content = myCodeMirror.getValue();
-            old_content = old_content.replace(/<script.*?>.*?<\/.*?script>/gi, "");
-            var trimmed_content = $.trim(old_content);
-            if(content !== trimmed_content ){
+).bind('focus blur keyup paste copy cut mouseup', function () {
+        var content = $(this).html().trim();
+        var old_content = myCodeMirror.getValue();
+        old_content = old_content.replace(/<script.*?>.*?<\/.*?script>/gi, "");
+        var trimmed_content = $.trim(old_content);
+        if(content !== trimmed_content ){
 //                var state_content = self.state.content;
 //                state_content.body = content;
 //                self.setState({content: state_content});
-                myCodeMirror.setValue(content);
-            }
-        })
+            myCodeMirror.setValue(content);
+        }
+        }).trigger('focus');
     },
   
     componentDidUpdate: function(){
-        
+        var element = this.refs.wysiwyg.getDOMNode();
+        $(element).trigger('focus');
     },
 
     render: function() {
