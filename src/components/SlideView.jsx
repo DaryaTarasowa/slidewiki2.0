@@ -60,7 +60,7 @@ var SlideView = React.createClass({
                         <ContentMenu startShow = {this.startShow} />
                         <div className="ui bottom attached segment">
                             <div className="sw-slide" id="sw_slide">
-                                <div className="ui segment">
+                                <div className="ui segment sw-slide">
                                     <div dangerouslySetInnerHTML={{__html: this.state.content.body}} />
                                 </div>
                             </div>

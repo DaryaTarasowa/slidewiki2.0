@@ -68,7 +68,7 @@ var TranslationButton = React.createClass({
         if (this.state.googleLanguages.length){
             languageList = this.state.googleLanguages.map(function(node, index){
             return (
-                    <div key={node.language} className="ui fitted labeled three wide column sw-menu-link">
+                    <div key={node.language} className="ui fitted labeled three wide column sw-menu-link" style={{display: "inline-block !important", padding:"0 10px !important"}}>
                         <a onClick={self.translateTo.bind(self, node.language)}>{node.name}</a>
                     </div> 
                 )
@@ -85,13 +85,13 @@ var TranslationButton = React.createClass({
                         <a className="item fitted vertically">Danish</a> 
                         <div className="divider"></div>
                         <div className="ui item" onClick={this.openGoogleLanguagesTab}>
-                            <i className="icon plane"></i>
+                           
                             <span className="text">TRANSLATE</span> 
                         </div>
                     </div>
                 </div>
-                 <div className="ui small modal" style={{display : this.state.googleFormOpened ? 'block' : 'none', marginTop : '-200', left: '52.5% !important'}}>
-                    <div className="ui red grid segment tertiary small attached">
+                 <div className="ui small modal" style={{display : this.state.googleFormOpened ? 'block' : 'none', top : '100', left: '52.5% !important', position:'fixed'}}>
+                    <div className="ui red grid segment tertiary small attached stackable">
                         <div className="ui row"><div className="ui column">
                             <div className="ui floating label sw-link red inverted" onClick={this.closeGoogleLanguages}>
                                 <i className="close icon sw-close-icon"></i>

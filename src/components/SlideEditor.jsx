@@ -28,26 +28,26 @@ var SlideEditor = React.createClass({
     componentDidUpdate: function(){
         var element = this.refs.wysiwyg.getDOMNode();
         $(element).wysiwyg({
-            classes: 'some-more-classes',
+            classes: 'buttons small compact icon sw-force-blue',
             // 'selection'|'top'|'top-selection'|'bottom'|'bottom-selection'
             toolbar:  'top',
             buttons: {
                 
                 insertimage: {
                     title: 'Insert image',
-                    image: '<i class="icon image"></i>', // <img src="path/to/image.png" width="16" height="16" alt="" />
+                    image: '<i class="icon camera"></i>', // <img src="path/to/image.png" width="16" height="16" alt="" />
                     showstatic: true,    // wanted on the toolbar
                     showselection: false    // wanted on selection
                 },
                 insertvideo: {
                     title: 'Insert video',
-                    image: '<i class="icon video"></i>', // <img src="path/to/image.png" width="16" height="16" alt="" />
+                    image: '<i class="icon video camera"></i>', // <img src="path/to/image.png" width="16" height="16" alt="" />
                     showstatic: true,    // wanted on the toolbar
                     showselection: false    // wanted on selection
                 },
                 insertlink: {
                     title: 'Insert link',
-                    image: '<i class="icon linkify"></i>' // <img src="path/to/image.png" width="16" height="16" alt="" />
+                    image: '<i class="icon external link"></i>' // <img src="path/to/image.png" width="16" height="16" alt="" />
                 },
                 // Fontname plugin
                 fontname: {
@@ -178,7 +178,7 @@ var SlideEditor = React.createClass({
                 },
                 highlight: {
                     title: 'Background color',
-                    image: '<i class="icon tini"></i>' // <img src="path/to/image.png" width="16" height="16" alt="" />
+                    image: '<i class="icon tint"></i>' // <img src="path/to/image.png" width="16" height="16" alt="" />
                 },
                 alignleft: {
                     title: 'Left',
@@ -332,13 +332,24 @@ var SlideEditor = React.createClass({
                             <TranslationButton context = {this.props.context} content={this.state.content}/>
                         </div>
                         <ContentMenu startShow = {this.startShow} />
-                        <div className="ui bottom attached segment" ref="wysiwyg">
+                        <div className="ui attached segment">
                             <div className="sw-slide" id="sw_slide">
-                                <div className="ui segment">
-                                    <div>WYSIWYG goes here</div>
+                                <div className="ui segment sw-slide">
+                                    <div> {this.state.content.body} </div>
                                 </div>
                             </div>
                         </div>
+                        
+                            
+                        <div className="ui attached segment sw-blue-border sw-slide sw-force-white" 
+                            ref="wysiwyg" 
+                            dangerouslySetInnerHTML={{__html: this.state.content.body}} 
+                        />
+                                
+                                
+                           
+                     
+                        
                     </div>
                 </div>
        
