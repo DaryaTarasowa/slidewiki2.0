@@ -256,7 +256,7 @@ var TreeNodes = React.createClass({
     componentDidUpdate: function(e){
         
         if (this.props.item.type.toString()==this.props.selector.type.toString() && this.props.item.id.toString()==this.props.selector.id.toString() && this.props.item.f_index == this.props.selected.f_index){
-            
+           
             if (!this.props.selector.title){
                 this.props.context.executeAction(treeActions._updateSelector, {
                     selector: {
@@ -275,6 +275,8 @@ var TreeNodes = React.createClass({
         if (this.props.item.type.toString()==this.props.selector.type.toString() && this.props.item.id.toString()==this.props.selector.id.toString() && this.props.item.f_index == this.props.selected.f_index){
             
             if (!this.props.selector.title){
+                
+            
                 this.props.context.executeAction(treeActions._updateSelector, {
                     selector: {
                         title:this.state.item.title,

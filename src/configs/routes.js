@@ -67,7 +67,6 @@ module.exports = {
                 deck: payload.params.id,
                 selector: selector
             }, done);
-
         }
     },
     play: {

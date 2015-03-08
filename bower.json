@@ -17,6 +17,7 @@
     "keymaster": "~1.6.2",
     "screenfull": "~1.2.1",
     "reveal.js": "~3.0.0",
-    "wysiwyg.js": "https://github.com/wysiwygjs/wysiwyg.js.git"
+    "wysiwyg.js": "https://github.com/wysiwygjs/wysiwyg.js.git",
+    "codemirror": "~5.0.0"
   }
 }

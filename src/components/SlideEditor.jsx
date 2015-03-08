@@ -6,6 +6,9 @@ var StoreMixin = require('fluxible').Mixin;
 //SlideWiki components
 var ContentMenu = require('./ContentMenu.jsx');
 var TranslationButton = require('./TranslationButton.jsx');
+var Highlight = require('react-highlight');
+
+
 
 var SlideEditor = React.createClass({
     mixins: [StoreMixin],
@@ -20,13 +23,36 @@ var SlideEditor = React.createClass({
     getStateFromStores: function () {
       return {
         content: this.getStore(SlideStore).getContent(),
+         
       };
     },
     _onChange: function() {
       this.setState(this.getStateFromStores());
     },
-    componentDidUpdate: function(){
-        var element = this.refs.wysiwyg.getDOMNode();
+
+    componentDidMount: function(){
+        var self = this;
+        var contentCode = this.refs.contentCode.getDOMNode();
+        var myCodeMirror = CodeMirror.fromTextArea(contentCode, {
+            
+            lineWrapping: true
+        })
+            myCodeMirror.on('change', function () {
+                var content = myCodeMirror.getValue();
+                content = content.replace(/<script.*?>.*?<\/.*?script>/gi, "");
+                var trimmed_content = $.trim(content);
+                var old_content = $(element).html().trim();
+                if(old_content !== trimmed_content ){
+                    var state_content = self.state.content;
+                    state_content.body = content;
+                    self.setState({content: state_content});
+                }
+        });
+        var element = this.refs.wysiwyg.getDOMNode(); //must be called 'element!!!'
+        
+            
+        
+        
         $(element).wysiwyg({
             classes: 'buttons small compact icon sw-force-blue',
             // 'selection'|'top'|'top-selection'|'bottom'|'bottom-selection'
@@ -50,73 +76,73 @@ var SlideEditor = React.createClass({
                     image: '<i class="icon external link"></i>' // <img src="path/to/image.png" width="16" height="16" alt="" />
                 },
                 // Fontname plugin
-                fontname: {
-                    title: 'Font',
-                    image: '<i class="icon font"></i>', // <img src="path/to/image.png" width="16" height="16" alt="" />
-                    popup: function( $popup, $button ) {
-                            var list_fontnames = {
-                                    // Name : Font
-                                    'Arial, Helvetica' : 'Arial,Helvetica',
-                                    'Verdana'          : 'Verdana,Geneva',
-                                    'Georgia'          : 'Georgia',
-                                    'Courier New'      : 'Courier New,Courier',
-                                    'Times New Roman'  : 'Times New Roman,Times'
-                                };
-                            var $list = $('<div/>').addClass('wysiwyg-toolbar-list')
-                                                   .attr('unselectable','on');
-                            $.each( list_fontnames, function( name, font ){
-                                var $link = $('<a/>').attr('href','#')
-                                                    .css( 'font-family', font )
-                                                    .html( name )
-                                                    .click(function(event){
-                                                        $(element).wysiwyg('shell').fontName(font).closePopup();
-                                                        // prevent link-href-#
-                                                        event.stopPropagation();
-                                                        event.preventDefault();
-                                                        return false;
-                                                    });
-                                $list.append( $link );
-                            });
-                            $popup.append( $list );
-                           },
-                    showstatic: true,    // wanted on the toolbar
-                    showselection: false    // wanted on selection
-                },
+//                fontname: {
+//                    title: 'Font',
+//                    image: '<i class="icon font"></i>', // <img src="path/to/image.png" width="16" height="16" alt="" />
+//                    popup: function( $popup, $button ) {
+//                            var list_fontnames = {
+//                                    // Name : Font
+//                                    'Arial, Helvetica' : 'Arial,Helvetica',
+//                                    'Verdana'          : 'Verdana,Geneva',
+//                                    'Georgia'          : 'Georgia',
+//                                    'Courier New'      : 'Courier New,Courier',
+//                                    'Times New Roman'  : 'Times New Roman,Times'
+//                                };
+//                            var $list = $('<div/>').addClass('wysiwyg-toolbar-list')
+//                                                   .attr('unselectable','on');
+//                            $.each( list_fontnames, function( name, font ){
+//                                var $link = $('<a/>').attr('href','#')
+//                                                    .css( 'font-family', font )
+//                                                    .html( name )
+//                                                    .click(function(event){
+//                                                        $(element).wysiwyg('shell').fontName(font).closePopup();
+//                                                        // prevent link-href-#
+//                                                        event.stopPropagation();
+//                                                        event.preventDefault();
+//                                                        return false;
+//                                                    });
+//                                $list.append( $link );
+//                            });
+//                            $popup.append( $list );
+//                           },
+//                    showstatic: true,    // wanted on the toolbar
+//                    showselection: false    // wanted on selection
+//                },
                 // Fontsize plugin
-                fontsize: {
-                    title: 'Size',
-                    image: '<i class="icon text height"></i>', // <img src="path/to/image.png" width="16" height="16" alt="" />
-                    popup: function( $popup, $button ) {
-                            var list_fontsizes = {
-                                // Name : Size
-                                'Huge'    : 7,
-                                'Larger'  : 6,
-                                'Large'   : 5,
-                                'Normal'  : 4,
-                                'Small'   : 3,
-                                'Smaller' : 2,
-                                'Tiny'    : 1
-                            };
-                            var $list = $('<div/>').addClass('wysiwyg-toolbar-list')
-                                                   .attr('unselectable','on');
-                            $.each( list_fontsizes, function( name, size ){
-                                var $link = $('<a/>').attr('href','#')
-                                                    .css( 'font-size', (8 + (size * 3)) + 'px' )
-                                                    .html( name )
-                                                    .click(function(event){
-                                                        $(element).wysiwyg('shell').fontSize(size).closePopup();
-                                                        // prevent link-href-#
-                                                        event.stopPropagation();
-                                                        event.preventDefault();
-                                                        return false;
-                                                    });
-                                $list.append( $link );
-                            });
-                            $popup.append( $list );
-                           }
-                    //showstatic: true,    // wanted on the toolbar
-                    //showselection: true    // wanted on selection
-                },
+//                fontsize: {
+//                    title: 'Size',
+//                    image: '<i class="icon text height"></i>', // <img src="path/to/image.png" width="16" height="16" alt="" />
+//                    popup: function( $popup, $button ) {
+//                            var list_fontsizes = {
+//                                // Name : Size
+//                                'Huge'    : 7,
+//                                'Larger'  : 6,
+//                                'Large'   : 5,
+//                                'Normal'  : 4,
+//                                'Small'   : 3,
+//                                'Smaller' : 2,
+//                                'Tiny'    : 1
+//                            };
+//                            var $list = $('<div/>').addClass('wysiwyg-toolbar-list')
+//                                                   .attr('unselectable','on');
+//                            $.each( list_fontsizes, function( name, size ){
+//                                var $link = $('<a/>').attr('href','#')
+//                                                    .css( 'font-size', (8 + (size * 3)) + 'px' )
+//                                                    .html( name )
+//                                                    .click(function(event){
+//                                                        $(element).wysiwyg('shell').fontSize(size).closePopup();
+//                                                        // prevent link-href-#
+//                                                        event.stopPropagation();
+//                                                        event.preventDefault();
+//                                                        return false;
+//                                                    });
+//                                $list.append( $link );
+//                            });
+//                            $popup.append( $list );
+//                           }
+//                    //showstatic: true,    // wanted on the toolbar
+//                    //showselection: true    // wanted on selection
+//                },
                 // Header plugin
                 header: {
                     title: 'Header',
@@ -172,14 +198,14 @@ var SlideEditor = React.createClass({
                     image: '<i class="icon strikethrough"></i>', // <img src="path/to/image.png" width="16" height="16" alt="" />
                     hotkey: 's'
                 },
-                forecolor: {
-                    title: 'Text color',
-                    image: '<i class="icon paint brush"></i>' // <img src="path/to/image.png" width="16" height="16" alt="" />
-                },
-                highlight: {
-                    title: 'Background color',
-                    image: '<i class="icon tint"></i>' // <img src="path/to/image.png" width="16" height="16" alt="" />
-                },
+//                forecolor: {
+//                    title: 'Text color',
+//                    image: '<i class="icon paint brush"></i>' // <img src="path/to/image.png" width="16" height="16" alt="" />
+//                },
+//                highlight: {
+//                    title: 'Background color',
+//                    image: '<i class="icon tint"></i>' // <img src="path/to/image.png" width="16" height="16" alt="" />
+//                },
                 alignleft: {
                     title: 'Left',
                     image: '<i class="icon align left"></i>', // <img src="path/to/image.png" width="16" height="16" alt="" />
@@ -304,22 +330,30 @@ var SlideEditor = React.createClass({
                             //    return false; // swallow enter
                             //}
                         }
+        }
+            
+
+
+).bind('blur keyup paste copy cut mouseup', function () {
+            var content = $(this).html().trim();
+            var old_content = myCodeMirror.getValue();
+            old_content = old_content.replace(/<script.*?>.*?<\/.*?script>/gi, "");
+            var trimmed_content = $.trim(old_content);
+            if(content !== trimmed_content ){
+//                var state_content = self.state.content;
+//                state_content.body = content;
+//                self.setState({content: state_content});
+                myCodeMirror.setValue(content);
+            }
         })
-        .change(function(){
-            if( typeof console != 'undefined' )
-                console.log( 'change' );
-        })
-        .focus(function(){
-            if( typeof console != 'undefined' )
-                console.log( 'focus' );
-        })
-        .blur(function(){
-            if( typeof console != 'undefined' )
-                console.log( 'blur' );
-        });
-       
     },
+  
+    componentDidUpdate: function(){
+        
+    },
+
     render: function() {
+      
         return (
                 <div className="sw-slide-panel">
                     <div className="panel">
@@ -332,24 +366,15 @@ var SlideEditor = React.createClass({
                             <TranslationButton context = {this.props.context} content={this.state.content}/>
                         </div>
                         <ContentMenu startShow = {this.startShow} />
-                        <div className="ui attached segment">
-                            <div className="sw-slide" id="sw_slide">
-                                <div className="ui segment sw-slide">
-                                    <div> {this.state.content.body} </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                            
                         <div className="ui attached segment sw-blue-border sw-slide sw-force-white" 
                             ref="wysiwyg" 
                             dangerouslySetInnerHTML={{__html: this.state.content.body}} 
                         />
-                                
-                                
-                           
-                     
-                        
+                        <div className="ui attached segment">
+                            <div className="sw-slide" id="sw_slide" >
+                                <textarea ref="contentCode" value = {this.state.content.body} readOnly />
+                            </div>
+                        </div>
                     </div>
                 </div>
        

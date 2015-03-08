@@ -47,3 +47,8 @@ body {
 .sw-blue-border{
     border: 1px solid #00aced !important;
 }
+
+.sw-hljs{
+ 
+    white-space: pre-wrap !important;
+}
