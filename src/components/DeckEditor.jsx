@@ -23,7 +23,6 @@ var DeckEditor = React.createClass({
       return {
         content: this.getStore(DeckStore).getContent(),
         theme_name: 'night',
-        edit: false
       };
     },
     _onChange: function() {
@@ -37,21 +36,11 @@ var DeckEditor = React.createClass({
         content[field] = e.target.value;
         this.setState({content : content});
     },
-    switchToEdit: function(){
-        this.setState({edit: true});
-    }, 
+    
   render: function(){
-      var self = this;
       var description = this.state.content.description || 'Provide description...';
       var origin = this.state.content.origin;
-      
-      var date = new Date(this.state.content.created_at);
-        var created_at;
-        if (date){
-            try{created_at = dateFormat(date, 'dd mmm yyyy');}
-            catch(err){created_at = null;}
-        }
-        
+      var self = this;
       return (
               <div className="sw-slide-panel">
                     <div className="panel">
@@ -64,31 +53,14 @@ var DeckEditor = React.createClass({
                             <TranslationButton context = {this.props.context} content={this.state.content}/>
                         </div>
                         <ContentMenu startShow = {this.startShow} />
-                        <div className="ui attached segment" >
-                            <div className="floating ui red label" style={{display: this.state.edit ? 'none' : 'inherit'}} onClick={this.switchToEdit}>Edit</div>
-                            <div className="floating ui red label" style={{display: this.state.edit ? 'inherit' : 'none'}}  onClick={this.save}>Save</div>
-                            <div contentEditable = {this.state.edit} dangerouslySetInnerHTML={{__html: this.state.content.description}} />
-                                <div className="ui divider">
-
+                        <div className="ui attached segment">
+                            <form className="ui form">
+                                <div className="field">
+                                <label>Abstract</label>
+                                <textarea value={description} onChange = {self._handleChange.bind(this, 'description')}></textarea>
                                 </div>
-                                <ul className="ui list">
-                                    <li>
-                                        Created at
-                                        <div contentEditable = {this.state.edit}>{created_at}</div>
-                                    </li>
-                                    <li>
-                                        Default style theme
-                                        <div contentEditable = {this.state.edit}></div>
-                                    </li>
-                                    <li>
-                                        Number of slides
-                                       <div contentEditable = {this.state.edit}>{this.state.content.numberOfSlides}</div>
-                                    </li>
-                                    <li>
-                                        Origin
-                                        <div contentEditable = {this.state.edit}>{this.state.content.origin}</div>
-                                    </li>
-                                </ul>
+
+                            </form>
                         </div>
                         
                         

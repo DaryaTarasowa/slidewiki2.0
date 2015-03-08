@@ -23,15 +23,13 @@ var SlideEditor = React.createClass({
     getStateFromStores: function () {
       return {
         content: this.getStore(SlideStore).getContent(),
-        edit: false 
+         
       };
     },
     _onChange: function() {
       this.setState(this.getStateFromStores());
     },
-    switchToEdit: function(){
-        this.setState({edit: true});
-    }, 
+
     componentDidMount: function(){
         var self = this;
         var contentCode = this.refs.contentCode.getDOMNode();
@@ -56,7 +54,7 @@ var SlideEditor = React.createClass({
         
         
         $(element).wysiwyg({
-            classes: 'buttons small compact icon sw-force-blue sw-nobottomborder',
+            classes: 'buttons small compact icon sw-force-blue',
             // 'selection'|'top'|'top-selection'|'bottom'|'bottom-selection'
             toolbar:  'top',
             buttons: {
@@ -368,25 +366,11 @@ var SlideEditor = React.createClass({
                             <TranslationButton context = {this.props.context} content={this.state.content}/>
                         </div>
                         <ContentMenu startShow = {this.startShow} />
-                        <div className="ui attached segment sw-blue-border sw-slide sw-force-white" style={{display: this.state.edit ? 'inherit' : 'none', padding:0, overflow:'visible'}}>
-                            <div className="floating ui red label " onClick={this.save}>Save</div>
-                            <div className="ui attached segment sw-nobottomborder" 
-                                ref="wysiwyg" 
-                                dangerouslySetInnerHTML={{__html: this.state.content.body}} 
-                            >
-                                
-                            </div>
-                        </div>
-                        <div className="ui bottom attached segment" style={{display: this.state.edit ? 'none' : 'inherit'}}>
-                            <div className="floating ui red label"  onClick={this.switchToEdit}>Edit</div>
-                            <div className="sw-slide" id="sw_slide">
-                                <div className="ui segment sw-slide">
-                                    <div dangerouslySetInnerHTML={{__html: this.state.content.body}} />
-                                </div>
-                            </div>
-                        </div>
-                
-                        <div className="ui attached segment" style={{display: this.state.edit ? 'inherit' : 'none'}}>
+                        <div className="ui attached segment sw-blue-border sw-slide sw-force-white" 
+                            ref="wysiwyg" 
+                            dangerouslySetInnerHTML={{__html: this.state.content.body}} 
+                        />
+                        <div className="ui attached segment">
                             <div className="sw-slide" id="sw_slide" >
                                 <textarea ref="contentCode" value = {this.state.content.body} readOnly />
                             </div>

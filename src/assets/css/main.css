@@ -23,7 +23,7 @@ body {
 }
 
 .sw-hidden{
-  display:none !important;
+  display:none;
 }
 
 .sw-menu-link {    
@@ -52,8 +52,3 @@ body {
  
     white-space: pre-wrap !important;
 }
-
-.sw-nobottomborder{
-    border-bottom: none !important;
-}
-

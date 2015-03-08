@@ -9,7 +9,8 @@ var TreeStore = require('../stores/TreeStore');
 //SlideWiki components
 var SlideEditor = require('./SlideEditor.jsx');
 var DeckEditor = require('./DeckEditor.jsx');
-
+var DeckView=require('./DeckView.jsx');
+var SlideView=require('./SlideView.jsx');
 var deckActions = require('../actions/DeckActions');
 var DeckStore = require('../stores/DeckStore');
 var ApplicationStore = require('../stores/ApplicationStore'); //for loading languages list
@@ -29,6 +30,7 @@ var ContentPanel = React.createClass({
         content_type: this.getStore(ContentStore).getContentType(),
         content_id: this.getStore(ContentStore).getContentID(),
         mode: this.getStore(TreeStore).getSelector().mode,        
+        
       };
     },
     _onChange: function() {
@@ -63,11 +65,11 @@ var ContentPanel = React.createClass({
       var viewContent, editContent;
       switch(this.state.content_type){
       case 'deck':
-        
+        viewContent=<DeckView id={this.state.content_id} context={this.props.context} />;
         editContent=<DeckEditor id={this.state.content_id} context={this.props.context}  />;
         break;
       case 'slide':
-        
+        viewContent=<SlideView id={this.state.content_id} context={this.props.context} />;
         editContent=<SlideEditor id={this.state.content_id} context={this.props.context} />;
         break;
       }
@@ -86,12 +88,17 @@ var ContentPanel = React.createClass({
         return (
             <div className="sw-content-panel">
                 <div className="ui top attached tabular menu">
-
+                    <a  className={viewTabClasses} onClick={this._onTabClick.bind(this, 'view')}>
+                        View
+                    </a>
                     <a  className={editTabClasses} onClick={this._onTabClick.bind(this, 'edit')}>
                         Edit
                     </a>
                 </div>  
 
+                <div className={viewContentClasses}>
+                    {viewContent}
+                </div>
                 <div className={editContentClasses}>
                     {editContent}
                 </div>
