@@ -38,9 +38,7 @@ var DeckPage = React.createClass({
 
             <div className="ui hidden divider"></div>
            
-                <div className="ui left vertical sidebar mobile only">
-                    <TreePanel context={this.props.context} rootDeckID={this.props.deckParams.id}/>
-                </div>
+               
             <div className="row">
 
               <div className="four wide column computer only tablet only">

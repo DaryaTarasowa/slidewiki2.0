@@ -1,9 +1,9 @@
 module.exports = {
-     loadLanguages: function(context, done){         
+     loadLanguages: function(context){         
         context.service.read('deck.google_languages', {}, {}, function(err, res) {
           if (err) {
             context.dispatch('GOOGLE_LANGUAGES_FAILURE', err);
-            done();
+        
             return;
           }
           context.dispatch('GOOGLE_LANGUAGES_SUCCESS', {
@@ -11,7 +11,7 @@ module.exports = {
           });
           //null indicates no error
           
-          done(null);
+  
         });       
     }
 }
