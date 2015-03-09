@@ -108,7 +108,7 @@ var AuthStore = createStore({
         this.isLoggingIn = true;
         this.emitChange();
         var self = this;
-        console.log(payload);
+        //console.log(payload);
         if (!payload.username.length){
             this.error = empty_user;
             this.isLoggingIn = false;
@@ -159,9 +159,9 @@ var AuthStore = createStore({
             .get(api.path + '/auth/facebook')
     
             .end(function(err, res){
-                console.log(err);
+                //console.log(err);
                 if (err){
-                    console.log(err);
+                    //console.log(err);
                 }
                 
 //                if (res.body.id){

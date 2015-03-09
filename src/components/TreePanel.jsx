@@ -9,6 +9,7 @@ var TreeNodes = require('./TreeNodes.jsx');
 
 var update = require('react/lib/update');
 var navigateAction = require('flux-router-component/actions/navigate');
+var _ = require('lodash');
 
 
 var TreePanel = React.createClass({
@@ -60,9 +61,14 @@ var TreePanel = React.createClass({
         var position, parent;
         
         if (selector.type === 'slide'){
+            
             parent = selector.parent.state.item;
             if (!parent) parent = this.state.item;
-            position = parent.children.indexOf(selected) + 2; //it is an index that's why + 1 and we need to add after => +2
+            var position = _.findIndex(parent.children, function(chr) {
+                return chr.f_index == selected.f_index;
+            });
+            position += 2; //it is an index that's why + 1 and we need to add after => +2
+            
         }else{
             parent = selected;
             if (!parent) parent = this.state.item;
@@ -212,7 +218,7 @@ var TreePanel = React.createClass({
     },
     componentDidUpdate: function(prevProps, prevState){
         $(".sw-tree-view-selected").scrollIntoView();
-        console.log(this.state.selector);
+        
         if (prevState.selector.id.toString() != this.state.selector.id.toString() 
             || prevState.selector.type.toString() != this.state.selector.type.toString() 
             || prevState.selector.mode.toString() != this.state.selector.mode.toString()){

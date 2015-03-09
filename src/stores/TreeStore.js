@@ -103,47 +103,28 @@ module.exports = createStore({
         //todo parent_deck_id should be different if slide is selected
         var self = this;
         var parent = payload.parent;
-        console.log('parent');
-        console.log(parent);
+       
         var new_slide = payload.new_slide;
-        agent
-            .post(api.path + '/slide/new')
-            .type('form')
-            .send(new_slide)
-            .end(function(err, res){
-                if (err){
-                    self.error = internal;
-                    self.emitChange();
-                }
-                else{
-                    new_slide.id = res.body.id;
-                    new_slide.parentID = parent.id;
-                    new_slide.type = 'slide';
-                    
-                    var max_f_index = _.max(parent.children, function(chr) { //adding unique f_index
-                        if (chr.f_index.toString().indexOf(':') !== -1){
-                            var index_arr = chr.f_index.toString().split(':');                            
-                            return parseInt(index_arr[index_arr.length - 1]);
-                        }else{
-                            return parseInt(chr.f_index);
-                        }
-                    });
-                    max_f_index = max_f_index.f_index + 1;
-                    if (parent.f_index){
-                        new_slide.f_index = parent.f_index + ':' + max_f_index;
-                    }else{
-                        new_slide.f_index = max_f_index; 
-                    }
-                    parent.children.splice(new_slide.position-1, 0, new_slide);
-                    if (parent.id === self.nodes.id){
-                        self.nodes = parent;
-                    }
-                    
-                    self.emitChange();
-                }
-            });
-
-      
+        new_slide.parentID = parent.id;
+        var max_f_index = _.max(parent.children, function(chr) { //adding unique f_index
+                                if (chr.f_index.toString().indexOf(':') !== -1){
+                                    var index_arr = chr.f_index.toString().split(':');                            
+                                    return parseInt(index_arr[index_arr.length - 1]);
+                                }else{
+                                    return parseInt(chr.f_index);
+                                }
+                            });
+                            max_f_index = max_f_index.f_index + 1;
+                            if (parent.f_index){
+                                new_slide.f_index = parent.f_index + ':' + max_f_index;
+                            }else{
+                                new_slide.f_index = max_f_index; 
+                            }
+        parent.children.splice(new_slide.position-1, 0, new_slide);
+        if (parent.id === self.nodes.id){
+            self.nodes = parent;
+        }
+        self.emitChange();
     },
     
     _onDrop : function(payload){
@@ -162,7 +143,7 @@ module.exports = createStore({
                         return self.emitChange();
                     }else{
                         if (res.body.error){
-                            console.log(res.body.error[0]);
+                            //console.log(res.body.error[0]);
                         }else{
                             console.log('_onDrop done');
                             self.dragging = {};
@@ -206,7 +187,7 @@ module.exports = createStore({
             if (this.dragging.state.item.type === 'slide'){
                 self.allowDrop = true;
                 console.log('checkdrposs slide done');
-                console.log(self.allowDrop);
+                //console.log(self.allowDrop);
                 self.emitChange();
 
             }else{
@@ -220,7 +201,7 @@ module.exports = createStore({
                         self._isCausingLoop({source_deck : self.dragging , target_deck : parent}, function(res){
                             self.allowDrop = !res;
                             console.log('checkdrposs deck-slide done');
-                            console.log(self.allowDrop);
+                            //console.log(self.allowDrop);
                             self.emitChange();
                         });
                     }
@@ -229,7 +210,7 @@ module.exports = createStore({
                         self.allowDrop = !res;
                         self.processing = false;
                         console.log('checkdrposs deck-deck done');
-                        console.log(self.allowDrop);
+                        //console.log(self.allowDrop);
                         self.emitChange();
                     });
                     

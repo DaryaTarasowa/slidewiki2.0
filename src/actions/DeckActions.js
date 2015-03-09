@@ -5,7 +5,7 @@ var DeckSliderStore = require('../stores/DeckSliderStore');
 var ContributorsStore = require('../stores/ContributorsStore');
 var DeckStore = require('../stores/DeckStore');
 var SlideStore = require('../stores/SlideStore');
-var treeActions = require('../actions/TreeActions');
+
 
 
 var DeckActions = {
@@ -45,13 +45,16 @@ var DeckActions = {
                         payload.selector.mode
                 });
                 done();
+            }else{
+                console.error(err);
+                done();
             }
         });
     },
     
 
     loadUpdateTree: function(context, payload, done){
-
+        
         if (context.getStore(TreeStore).isAlreadyComplete(payload.deck)) {
             //only highlight node
 
@@ -68,7 +71,8 @@ var DeckActions = {
         }
     },
     
-    updateTreeNodeSelector: function(context, payload, done){  
+    updateTreeNodeSelector: function(context, payload, done){
+        
         context.dispatch('UPDATE_TREE_NODE_SELECTOR', {
             selector: payload.selector
         });
@@ -77,6 +81,7 @@ var DeckActions = {
     },
     
     showDeckTree: function(context, payload, done){
+        
         context.dispatch('SHOW_DECK_TREE_START', payload);
         
         context.service.read('deck.tree', payload, {}, function(err, res) {
@@ -96,6 +101,7 @@ var DeckActions = {
     
     loadContainer: function(context, payload, done){
         //first need to prepare the right container for deck/slide/etc.
+        
         context.executeAction(module.exports.prepareContentType, {
             selector: payload.selector
         }, function(res) {
@@ -124,6 +130,7 @@ var DeckActions = {
     },
     
     showDeck: function (context, payload, done) {
+        console.error(payload);
         context.dispatch('SHOW_DECK_START', payload);
         var object = {selector: {type: payload.selector.type, id:payload.selector.id, mode: payload.selector.mode}};
         context.service.read('deck.content', object, {}, function (err, res) {
@@ -168,21 +175,20 @@ var DeckActions = {
         }        
     },
     forceLoadSlides : function(context, payload, done){
-        console.log('force');
-        if (payload.selector.type === 'slide') {
-            //reload slides list
-            context.executeAction(module.exports.showSliderControl, {
+       
+        context.executeAction(module.exports.showSliderControl, {
                   deck: payload.deck,
                   selector: {
                       type: 'slide',
                       id: payload.selector.id,
                       mode: payload.selector.mode
                   }
-            }, done);
+            });
+        if (payload.selector.type === 'deck') {
             
+             context.executeAction(module.exports.hideSliderControl, {}, done);
         } else {
-            //hide slider control
-            context.executeAction(module.exports.hideSliderControl, {}, done);
+            done();
         }
     },
     loadSlides : function(context, payload, done){  

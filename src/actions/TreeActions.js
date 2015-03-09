@@ -11,23 +11,36 @@ exports.deleteFrom = function(context, payload, done){
 };
 
 exports.addEmptySlide = function(context, payload, done){
-    context.dispatch('ADD_EMPTY_SLIDE', payload); 
-//    if (payload.selector.type === 'slide') {
-//            //reload slides list
-//            console.log('slide');
-//            context.executeAction(deckActions.showSliderControl, {
-//                  deck: payload.deck,
-//                  selector: {
-//                      type: 'slide',
-//                      id: payload.selector.id
-//                  }
-//            }, done);
-//            
-//        } else {
-//            //hide slider control
-//            context.executeAction(deckActions.hideSliderControl, {}, done);
-//        }
-    //context.executeAction(deckActions.forceLoadSlides, {deck:payload.deck, selector: {type: payload.selector.type, id: payload.selector.id}}, done);
+    
+            var short_payload = {
+                deck: payload.deck, 
+                new_slide: payload.new_slide,
+                
+                selector: {
+                    type: payload.selector.type, 
+                    id: payload.selector.id, 
+                    mode: payload.selector.mode
+                }
+                
+            };
+           
+            context.service.read('deck.addSlide', short_payload, {}, function(err, res) {
+            if (err) {
+                context.dispatch('SHOW_DECK_TREE_FAILURE', err);
+                done();
+                return;
+            }
+            context.dispatch('ADD_EMPTY_SLIDE', {
+                slides: res.slides,
+                selector: payload.selector,
+                new_slide: res.new_slide,
+                parent: payload.parent,
+                deckID: payload.deck
+            });
+            //null indicates no error
+            done(null);
+        });
+    
 };
 
 exports._onDragStart = function(context, payload, done){

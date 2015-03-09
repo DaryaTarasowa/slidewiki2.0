@@ -19,6 +19,7 @@ var SliderControl = React.createClass({
       return this.getStateFromStores();
     },
     getStateFromStores: function () {
+        
       return {
         visible:this.getStore(DeckSliderStore).isVisible(),
         slidesnumber: this.getStore(DeckSliderStore).getSlidesNumber(),

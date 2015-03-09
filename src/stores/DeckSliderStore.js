@@ -1,6 +1,7 @@
 'use strict';
 var createStore = require('fluxible/utils/createStore');
 var _ = require('lodash');
+var TreeStore = require('../stores/TreeStore');
 
 module.exports = createStore({
   storeName: 'DeckSliderStore',
@@ -12,7 +13,8 @@ module.exports = createStore({
     'HIDE_SLIDER_CONTROL':'_hideSliderControl',
     'PLAY_DECK_SUCCESS': 'setSlides',
     PLAY_DECK_FAILURE: 'playDeckFailure',
-    SET_THEME: 'setTheme'
+    SET_THEME: 'setTheme',
+    ADD_EMPTY_SLIDE: 'addEmptySlide'
   },
   initialize: function () {
     this.deckID=0;
@@ -34,8 +36,12 @@ module.exports = createStore({
       this.theme = theme;
       this.emitChange();
   },
-  
+  addEmptySlide: function(payload){
+      this.slides = payload.slides;  
+      this.emitChange();
+  },
   _showSliderControlSuccess: function (res) {
+    
     this.visibility=1;
     this.deckID= parseInt(res.deckID);
     this.slides= res.slides;
@@ -45,6 +51,7 @@ module.exports = createStore({
     this.emitChange();
   },
   setSlides: function(res){
+     
         this.deckID= parseInt(res.deckID);
         this.slides= res.slides;          
         this.emitChange();
@@ -133,7 +140,7 @@ module.exports = createStore({
   //it is used for preventing rendering/API calls on each request
   //todo: we can change this on update actions to reload slide list
   isAlreadyComplete: function() {
-    if (!this.slides.length) {
+    if (!this.slides.length || !this.deckID) {
       //empty
       return false;
     } else {
