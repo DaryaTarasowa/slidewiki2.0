@@ -4,7 +4,7 @@ var NavLink = require('flux-router-component').NavLink;
 var AuthStore = require('../stores/AuthStore');
 var StoreMixin = require('fluxible').Mixin;
 var loginActions = require('../actions/LoginActions');
-var LocalStorageMixin = require('react-localstorage');
+
 
 var Nav = React.createClass({
     getInitialState: function () {
