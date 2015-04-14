@@ -1,6 +1,7 @@
 //actions used by the routes
 
 var deckActions = require('../actions/DeckActions');
+var userActions = require('../actions/UserActions');
 var TreeStore = require('../stores/TreeStore');
 
 module.exports = {
@@ -16,6 +17,17 @@ module.exports = {
                 pageTitle: 'SlideWiki | Home'
             });
             done();
+        }
+    },
+    user: {
+        path: '/user/:id',
+        method: 'get',
+        page: 'user',
+        label: 'User',
+        action: function(context, payload, done) {
+            // 
+            context.executeAction(userActions.showUser, { id: payload.params.id }, done);
+            context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: 'SlideWiki | About'});
         }
     },
     about: {
@@ -67,6 +79,7 @@ module.exports = {
                 deck: payload.params.id,
                 selector: selector
             }, done);
+
         }
     },
     play: {

@@ -8,7 +8,6 @@ box-sizing: border-box;
 
 
 body {
-  font:normal normal 13px/1.4 Segoe,"Segoe UI",Calibri,Helmet,FreeSans,Sans-Serif;
   margin-bottom: 60px;
   
 }
@@ -34,21 +33,4 @@ body {
     border-left: rgb(218, 0, 114) 1px solid;
     cursor: pointer;
     background: rgba(0,0,0,0.1) !important;
-}
-
-.sw-force-white{
-    background: #fff !important;
-}
-
-.sw-force-blue{
-    background: #00aced !important;
-}
-
-.sw-blue-border{
-    border: 1px solid #00aced !important;
-}
-
-.sw-hljs{
- 
-    white-space: pre-wrap !important;
 }

@@ -1,0 +1,36 @@
+h2.user {	
+	border-bottom: 1px solid #e0e0e0;
+	margin: 1em !important;
+}
+
+.ui .message {
+	position: relative;
+	min-height: 1em;
+	margin: 1em 0;
+	background: #efefef;
+	padding: 1em 1.5em;
+	line-height: 1.3;
+	color: rgba(0,0,0,.8);
+	-webkit-transition: opacity .2s ease,color .2s ease,background .2s ease,box-shadow .2s ease;
+	transition: opacity .2s ease,color .2s ease,background .2s ease,box-shadow .2s ease;
+	border-radius: .2857rem;
+	box-shadow: 0 0 0 1px rgba(39,41,43,.15)inset,0 0 0 0 transparent;
+}
+
+.ui .message .header {
+	display: block;
+	font-weight: 700;
+	margin: 0 0 .5rem;
+}
+
+.rounded {	
+	border-radius: .3125em;
+	margin-left: 20px;
+}
+
+td {
+	padding: 8;
+}
+td.title {
+	color: #a0a0a0;
+}

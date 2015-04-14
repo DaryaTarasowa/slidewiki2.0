@@ -11,7 +11,8 @@ var AuthStore = require('../stores/AuthStore');
 var RouterMixin = require('flux-router-component').RouterMixin;
 var StoreMixin = require('fluxible').Mixin;
 var PlayPage = require('./PlayPage.jsx');
-var appActions = require('../actions/AppActions');
+var UserPage = require('./UserPage.jsx');
+
 
 var Application = React.createClass({
     mixins: [RouterMixin, StoreMixin],
@@ -36,7 +37,7 @@ var Application = React.createClass({
         var user = document.cookie.username;
         console.log(user);
         console.log(document.cookie);
-        this.props.context.executeAction(appActions.loadLanguages);
+
     },
     render: function () {
       var output='';
@@ -58,6 +59,15 @@ var Application = React.createClass({
                         <div><Nav selected={this.state.route} links={this.state.routes} context={this.props.context} /></div>
                         <LoginFormContainer context={this.props.context}/>
                         <AboutPage/>
+                        <Footer />
+                    </div>
+          
+          break;
+        case 'user': 
+          output=   <div>
+                        <div><Nav selected={this.state.route} links={this.state.routes} context={this.props.context} /></div>
+                        <LoginFormContainer context={this.props.context}/>
+                        <UserPage/>
                         <Footer />
                     </div>
           

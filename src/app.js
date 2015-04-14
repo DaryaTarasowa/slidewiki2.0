@@ -19,6 +19,7 @@ app.plug(fetchrPlugin({
 app.registerStore(require('./stores/ApplicationStore'));
 app.registerStore(require('./stores/TreeStore'));
 app.registerStore(require('./stores/ContributorsStore'));
+app.registerStore(require('./stores/UserStore'));
 app.registerStore(require('./stores/ContentStore'));
 app.registerStore(require('./stores/DeckStore'));
 app.registerStore(require('./stores/SlideStore'));
