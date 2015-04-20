@@ -88,7 +88,7 @@ var TreeNodes = React.createClass({
         }
         var titleString = this.state.titleInput ? 
                                                     <div className="ui small transparent input active icon">
-                                                        {nodeIcon}<input type="text" ref="titleInput" placeholder={this.props.item.title} onKeyDown = {this._onEnterClick}/>
+                                                        {nodeIcon}<input type="text" ref="titleInput" placeholder={this.props.item.title} onKeyDown = {this._onEnterClick} onBlur = {this._hideTitleInput}/>
                                                     </div> 
                                                 : 
                                                     <div>{nodeIcon}{shorten(this.props.item.title)}</div>
@@ -143,9 +143,10 @@ var TreeNodes = React.createClass({
                             onDrop = {this._onDrop} onDragEnter={this._onDragEnter} onDragOver = {this._onDragOver}
                             
                             onDragLeave={this._onDragLeave}
+                            
                         >   
                             <div className="ui labeled fluid">
-                                <div href={path} context={this.props.context}  onClick={this._onClick} >
+                                <div href={path} context={this.props.context}  onClick={this._onClick} onBlur = {this._onBlur}>
                                     <div ref="actionBar" className="sw-hidden" >
                                         <i className="small ellipsis vertical icon"></i>
                                         {this.props.item.type=='deck'? <i className="small blue icon add link"></i> :''}
@@ -174,8 +175,10 @@ var TreeNodes = React.createClass({
             current.setSelectionRange(0, 0);
         });
     },
-    _onClick: function(e) {
-        
+    _hideTitleInput: function(e){
+        this.setState({titleInput : false});
+    },
+    _onClick: function(e) {      
         
         this.props.context.executeAction(deckActions.loadUpdateTree, 
         
