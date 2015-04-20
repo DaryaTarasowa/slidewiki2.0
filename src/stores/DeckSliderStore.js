@@ -14,7 +14,8 @@ module.exports = createStore({
     'PLAY_DECK_SUCCESS': 'setSlides',
     PLAY_DECK_FAILURE: 'playDeckFailure',
     SET_THEME: 'setTheme',
-    ADD_EMPTY_SLIDE: 'addEmptySlide'
+    ADD_EMPTY_SLIDE: 'addEmptySlide',
+    DELETE_FROM: 'deleteFrom'
   },
   initialize: function () {
     this.deckID=0;
@@ -37,6 +38,10 @@ module.exports = createStore({
       this.emitChange();
   },
   addEmptySlide: function(payload){
+      this.slides = payload.slides;  
+      this.emitChange();
+  },
+  deleteFrom: function(payload){
       this.slides = payload.slides;  
       this.emitChange();
   },

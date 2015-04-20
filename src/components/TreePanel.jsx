@@ -40,17 +40,19 @@ var TreePanel = React.createClass({
 
     deleteFrom : function(){
         var selected = this.state.selected;
+
         var selector = this.state.selector;
         var parent = selector.parent;
-        //console.log(parent.state.item.title);
         if (parent){ //we selected not a root deck
-            var index = parent.state.item.children.indexOf(selected);
+            var index = _.findIndex(parent.state.item.children, function(chr) {
+                return chr.f_index == selected.f_index;
+            });
             
-            //console.log(parent.state.item.children);
+
             
-            this.props.context.executeAction(treeActions.deleteFrom, {parent: parent.state.item, type: selected.type, id: selected.id, index :index});
-            parent.state.item.children.splice(index, 1);
-            parent.setState({item: parent.state.item});
+            this.props.context.executeAction(treeActions.deleteFrom, {parent: parent.state.item, type: selected.type, id: selected.id, index :index, deck: this.state.item.id});
+//            parent.state.item.children.splice(index, 1);
+//            parent.setState({item: parent.state.item});
         }
         
     },

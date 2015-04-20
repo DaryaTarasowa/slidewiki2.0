@@ -130,7 +130,6 @@ var DeckActions = {
     },
     
     showDeck: function (context, payload, done) {
-        console.error(payload);
         context.dispatch('SHOW_DECK_START', payload);
         var object = {selector: {type: payload.selector.type, id:payload.selector.id, mode: payload.selector.mode}};
         context.service.read('deck.content', object, {}, function (err, res) {

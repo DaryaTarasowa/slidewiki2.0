@@ -70,32 +70,26 @@ module.exports = createStore({
     },
     delete_from : function(payload){
         var self = this;
-        agent
-            .get(api.path + '/deleteFrom/'+payload.parent.id+'/'+payload.type+'/'+payload.id)
-            .end(function(err, res){
-                if (err){
-                    self.error = internal;
-                    return self.emitChange();
-                }
-                else{
-                    var next = payload.parent.children[payload.index];
-                    var selector, selected;
-                    if (next){
-                        selected = next;
-                        selector = {id: next.id, type: next.type, title: next.title, parent: self.selector.parent};
-                    }else{
-                        next = self.selector.parent.state.item;
-                        selector = {id: next.id, type: next.type, title: next.title, parent: self.selector.parent.props.parent};
-                        selected = next;
-                    }
-                    self._updateSelector({selector: selector, selected: selected});
-                    
-                    
-                    //self.selected = self.nodes;
-                    //self.selector = {id: self.nodes.id, type: 'deck'};
-                    return self.emitChange();
-                }
-            });
+
+        var parent = payload.parent;
+        var next = parent.children[payload.index + 1];
+        
+        parent.children.splice(payload.index, 1);
+        var selector, selected;
+        if (next){
+            selected = next;
+            selector = {id: next.id, type: next.type, title: next.title, parent: self.selector.parent, mode: self.selector.mode};
+        }else{
+            next = self.selector.parent.state.item;
+            selector = {id: next.id, type: next.type, title: next.title, parent: self.selector.parent.props.parent, mode: self.selector.mode};
+            selected = next;
+        }
+
+        self._updateSelector({selector: selector, selected: selected});
+        if (parent.id === self.nodes.id){
+            self.nodes = parent;
+        }
+        self.emitChange();              
     },
     
     addEmptySlide : function(payload){

@@ -3,13 +3,6 @@ var async = require('async');
 var TreeStore = require('../stores/TreeStore');
 var deckActions = require('../actions/DeckActions');
 
-exports.deleteFrom = function(context, payload, done){
-    context.dispatch('DELETE_FROM', payload);
-    
-    //context.executeAction(deckActions.loadSlides, {deck:payload.deck, selector: payload.selector});
-    done();
-};
-
 exports.addEmptySlide = function(context, payload, done){
     
             var short_payload = {
@@ -37,6 +30,30 @@ exports.addEmptySlide = function(context, payload, done){
                 parent: payload.parent,
                 deckID: payload.deck
             });
+            //null indicates no error
+            done(null);
+        });
+    
+};
+
+exports.deleteFrom = function(context, payload, done){
+    
+            var short_payload = {
+                id: payload.id, 
+                type: payload.type,
+                parent_id: payload.parent.id,
+                deck: payload.deck
+                
+            };
+           
+            context.service.read('deck.deleteSlide', short_payload, {}, function(err, res) {
+            if (err) {
+                context.dispatch('SHOW_DECK_TREE_FAILURE', err);
+                done();
+                return;
+            }
+            payload.slides = res.slides;
+            context.dispatch('DELETE_FROM', payload);
             //null indicates no error
             done(null);
         });

@@ -178,7 +178,40 @@ module.exports = {
                             });                            
                         }
                     });
-                    break;
+                break;
+            case 'deck.deleteSlide' :
+                var deck_id = params.deck;
+                agent
+                    .get(api.path + '/deleteFrom/'+params.parent_id+'/'+params.type+'/'+params.id)
+                    
+                    .end(function(err, res){
+                        if (err){
+                            callback(err);
+                        }
+                        else{
+                            httpOptions.path = "/api/deck/slides/" + deck_id + "/offset/1/limit/0/true";
+                            http.get(httpOptions, function(response) {
+                              // Continuously update stream with data
+                                var body = '';
+                                response.on('data', function(d) {
+                                     body += d;
+                                });
+                                response.on('end', function() {
+                                    // Data reception is done, do whatever with it!
+                                    var parsed = JSON.parse(body);
+                                    if (parsed.error){
+                                        callback(parsed.error, null);
+                                    }else{
+                                        var res = {                                            
+                                            slides: parsed.slides                                            
+                                        };
+                                      callback(null, res);
+                                    }
+                                });
+                            });                            
+                        }
+                    });
+                break;
             case 'deck.users' :
                 var user_id = params.id;
                 httpOptions.path = "/api/user/" + user_id;
