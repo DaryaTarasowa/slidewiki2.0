@@ -5,7 +5,7 @@ var routrPlugin = require('fluxible-plugin-routr');
 var fetchrPlugin = require('fluxible-plugin-fetchr');
 
 var app = new Fluxible({
-    appComponent: React.createFactory(require('./components/Application.jsx'))
+    component: React.createFactory(require('./components/Application.jsx'))
 });
 //plugin for managing routes
 app.plug(routrPlugin({
