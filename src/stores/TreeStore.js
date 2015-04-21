@@ -115,6 +115,15 @@ module.exports = createStore({
                                 new_slide.f_index = max_f_index; 
                             }
         parent.children.splice(new_slide.position-1, 0, new_slide);
+        var selected = new_slide;
+        var selector;
+        if (self.selector.type === 'slide'){
+            selector = {id: new_slide.id, type: 'slide', title: new_slide.title, parent: self.selector.parent, mode: self.selector.mode};
+        }else{
+            selector = {id: new_slide.id, type: 'slide', title: new_slide.title, parent: self.selected, mode: self.selector.mode};
+        }
+        
+        self._updateSelector({selector: selector, selected: selected});
         if (parent.id === self.nodes.id){
             self.nodes = parent;
         }
