@@ -44,7 +44,8 @@
     "serialize-javascript": "^1.0.0",
     "serve-favicon": "^2.1.6",
     "superagent": "^0.21.0",
-    "t": "^0.5.1"
+    "t": "^0.5.1",
+    "urldecode": "~1.0.1"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

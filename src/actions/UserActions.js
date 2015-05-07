@@ -18,6 +18,15 @@ var UserActions = {
                 done(null);
             });
                 
+    },
+
+    retrieveFBUser: function (context, payload, done) {
+
+                context.dispatch('SHOW_USERS_SUCCESS', payload);
+                context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: 'SlideWiki | Facebook Link'});
+
+                done(null);
+                
     }
     
 

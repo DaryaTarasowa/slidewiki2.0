@@ -3,6 +3,7 @@ var React = require('react');
 var Nav = require('./Nav.jsx');
 var Footer = require('./Footer.jsx');
 var HomePage = require('./HomePage.jsx');
+var FacebookLink = require('./Facebook.jsx');
 var AboutPage = require('./AboutPage.jsx');
 var DeckPage = require('./DeckPage.jsx');
 var LoginFormContainer = require('./LoginFormContainer.jsx');
@@ -35,7 +36,6 @@ var Application = React.createClass({
     },
     componentDidMount : function(){
         var user = document.cookie.username;
-        console.log(user);
         console.log(document.cookie);
 
     },
@@ -57,8 +57,17 @@ var Application = React.createClass({
         case 'about': 
           output=   <div>
                         <div><Nav selected={this.state.route} links={this.state.routes} context={this.props.context} /></div>
-                        <LoginFormContainer context={this.props.context}/>
+                        <LoginFormContainer context={this.props.context}/>   
                         <AboutPage/>
+                        <Footer />
+                    </div>
+          
+          break;
+          case 'facebookLink': 
+          output=   <div>
+                        <div><Nav selected={this.state.route} links={this.state.routes} context={this.props.context} /></div>
+                        <LoginFormContainer context={this.props.context}/>   
+                        <FacebookLink/>
                         <Footer />
                     </div>
           

@@ -108,7 +108,7 @@ var AuthStore = createStore({
         this.isLoggingIn = true;
         this.emitChange();
         var self = this;
-        //console.log(payload);
+        console.log(payload);
         if (!payload.username.length){
             this.error = empty_user;
             this.isLoggingIn = false;
@@ -126,14 +126,17 @@ var AuthStore = createStore({
             agent
             .post(api.path + '/signup')
             .type('form')
-            .send({ username: payload.username, password: payload.password, email: payload.email })
+            .send({ username: payload.username, password: payload.password, email: payload.email, fb_id: payload.fb_id })
             .end(function(err, res){
                 if (err){
                     self.error = internal;
                     return self.emitChange();
                 }else{
+                    if (res.body.error){
+                    // return self._setLoggedIn(res.body);
                     switch (res.body.error[0]) {
                         case 'INTERNAL' :
+                            console.log(res.body);
                             self.error = internal;
                             self.isLoggingIn = false;
                             return self.emitChange();
@@ -144,8 +147,12 @@ var AuthStore = createStore({
                             return self.emitChange();
                             break;
                         default: 
+                            console.log(res.body);
                             return self._setLoggedIn(res.body);
-                    }
+                        }
+                    }else{
+                            return self._setLoggedIn(res.body);
+                        }
                 }
             });
         }
