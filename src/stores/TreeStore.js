@@ -246,6 +246,7 @@ module.exports = createStore({
         
         var mutated_notes = nodes.children.map(function(node, index){
             node = nodes.children[index];
+            node.parentID = nodes.id;
             var new_index = index - 0 + 1;
             if (nodes.f_index){                
                 node.f_index = nodes.f_index + ':' + new_index;
@@ -279,44 +280,17 @@ module.exports = createStore({
         this._setIndexes(res.nodes, function(mutated){
             self.nodes = mutated;
             self.emitChange();
-            self.findSelected(self.nodes, function(selected){
+            self.findByIdAndType(self.selector.id, self.selector.type, self.nodes, function(selected){
               
                 self.selected = selected;
-                self._createBreadcrumbInit(function (path) {
-                    self.breadcrumb = path;
-                    self.emitChange();
-                });
+                self._createBreadcrumb(selected, [], function (path) {
+                        self.breadcrumb = path;
+                        self.emitChange();
+                    });
             });            
         });
     }, 
-    findSelected: function(nodes, callback){
-        var self = this;
-        var node = [];
-      
-        if (self.selector.type === 'deck' && self.selector.id === nodes.id){ //root deck is selected
-            
-            return callback(nodes);
-        }else{
-            var node = nodes.children.filter(function(item){
-                return item.type === self.selector.type && item.id.toString() === self.selector.id.toString();
-            });
-            
-            if (node.length){
-                node[0].parentID = nodes.id;
-                callback(node[0]);
-            }else{
-                nodes.children.map(function(node){
-                    if (node.children){
-                        self.findSelected(node, function(node_child){
-                            if (node_child){
-                                return callback(node_child);
-                            }
-                        });
-                    }
-                });
-            }
-        }
-    },
+
     _enrichSelector: function(res){
         
         this.selector = res.selector;        
@@ -334,10 +308,10 @@ module.exports = createStore({
                     self.emitChange();
                 });
             }else{
-                self.findSelected(self.nodes, function(selected){
+                self.findByIdAndType(self.selector.id, self.selector.type, self.nodes, function(selected){
 
                     self.selected = selected;
-                    self._createBreadcrumbInit(function (path) {
+                    self._createBreadcrumb(self.selected, [], function (path) {
                         self.breadcrumb = path;
                         self.emitChange();
                     });
@@ -351,57 +325,89 @@ module.exports = createStore({
         }
         
     },
-    _createBreadcrumbInit: function (fn) {
-        var found = 0;
+//    _createBreadcrumbInit: function (fn) {
+//        var found = 0;
+//        var self = this;
+//        //collect first level nodes for DFS
+//        var firstlevel = [];
+//        _.forEach(self.nodes.children, function (node) {
+//            if (node.type === 'deck') {
+//                firstlevel.push(node.id.toString());
+//            }
+//        });
+//        
+//        var path = [];
+//        t.dfs(self.nodes, [], function (node, par, ctrl) {
+//            if (node.type === 'deck') {
+//                if (_.indexOf(firstlevel, node.id.toString()) > 0) {
+//                    path = [{
+//                            id: self.nodes.id,
+//                            title: self.nodes.title
+//                        }];
+//                }
+//                if (!found) {
+//                    path.push({
+//                        id: node.id,
+//                        title: node.title
+//                    });
+//                    
+//                }
+//            }
+//            if (node.id.toString() === self.selector.id.toString() && node.type.toString() === self.selector.type.toString()) {
+//                //prevent duplicate decks in path
+//                if (node.type.toString() !== 'deck') {
+//                    path.push({
+//                        id: node.id,
+//                        title: node.title
+//                    });
+//                }
+//                //id found
+//                found = 1;
+//                
+//                return fn(path);
+//            }
+//        });
+//    },
+    findByIdAndType : function(id, type, nodes, callback){
         var self = this;
-        //collect first level nodes for DFS
-        var firstlevel = [];
-        _.forEach(self.nodes.children, function (node) {
-            if (node.type === 'deck') {
-                firstlevel.push(node.id);
+        var node = [];
+      
+        if (type === nodes.type && id.toString() === nodes.id.toString()){ //root deck is selected
+            
+            return callback(nodes);
+        }else{
+            var node = nodes.children.filter(function(item){
+                return item.type === type && item.id.toString() === id.toString();
+            });
+            
+            if (node.length){               
+                callback(node[0]);
+            }else{
+                nodes.children.map(function(node){
+                    if (node.children){
+                        self.findByIdAndType(id, type, node, function(node_child){
+                            if (node_child){
+                                return callback(node_child);
+                            }
+                        });
+                    }
+                });
             }
-        });
-        
-        var path = [];
-        t.dfs(self.nodes, [], function (node, par, ctrl) {
-            if (node.type === 'deck') {
-                if (_.indexOf(firstlevel, node.id) > 0) {
-                    path = [{
-                            id: self.nodes.id,
-                            title: self.nodes.title
-                        }];
-                }
-                if (!found) {
-                    path.push({
-                        id: node.id,
-                        title: node.title
-                    });
-                    
-                }
-            }
-            if (node.id.toString() === self.selector.id.toString() && node.type.toString() === self.selector.type.toString()) {
-                //prevent duplicate decks in path
-                if (node.type !== 'deck') {
-                    path.push({
-                        id: node.id,
-                        title: node.title
-                    });
-                }
-                //id found
-                found = 1;
-                
-                return fn(path);
-            }
-        });
+        }
     },
     
-    _createBreadcrumb : function(selector, path_acc, callback){
+    _createBreadcrumb : function(selected, path_acc, callback){
         
         var self = this;
-        if (selector.parent){ //not a root deck 
-            path_acc.unshift({id : selector.id, title: selector.title});
-            var selector = {id : selector.parent.state.item.id, title: selector.parent.state.item.title, parent: selector.parent.props.parent}
-            self._createBreadcrumb(selector, path_acc, callback); //shift array, go to next level
+
+        if (selected.parentID){ //not a root deck 
+            path_acc.unshift({id : selected.id, title: selected.title});
+            self.findByIdAndType(selected.parentID, 'deck', self.nodes, function(parent){
+                selected = parent;
+                self._createBreadcrumb(selected, path_acc, callback); //shift array, go to next level
+            });
+            //var selector = {id : selector.parent.state.item.id, title: selector.parent.state.item.title, parent: selector.parent.props.parent}
+            
         }else{ //root deck 
             path_acc.unshift({id : self.nodes.id, title: self.nodes.title});
             return callback(path_acc);
