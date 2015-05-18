@@ -18,8 +18,6 @@ var UserPage = React.createClass({
     };
   },
     render: function() {
-
-      
       var prettyDate = dateFormat(this.state.ObjectData.registered, 'dd mmm yyyy');
       var descTempl = <p>No description written by user</p>;
 

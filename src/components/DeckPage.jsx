@@ -1,16 +1,70 @@
 'use strict';
 var React = require('react');
+var StoreMixin = require('fluxible').Mixin;
 var DeckHeader = require('./DeckHeader.jsx');
 var TreePanel = require('./TreePanel.jsx');
 var ContentPanel = require('./ContentPanel.jsx');
 var ContributorsPanel = require('./ContributorsPanel.jsx');
 var SliderControl = require('./SliderControl.jsx');
 var DeckNewsFeed = require('./DeckNewsFeed.jsx');
+var DeckStore = require('../stores/DeckStore');
 var deckActions = require('../actions/DeckActions');
 
 var async = require('async');
 
 var DeckPage = React.createClass({
+    mixins: [StoreMixin],
+    statics: {
+      storeListeners: {
+        _onChange: [DeckStore]
+      }
+    },
+    getInitialState: function () {
+      return this.getStateFromStores();
+    },
+    getStateFromStores: function () {
+      return {
+        content: this.getStore(DeckStore).getContent(),
+        theme_name: 'night',
+      };
+    },
+    _onChange: function () {
+        
+        this.setState(this.getStateFromStores());
+    },
+    render: function() {
+      var output;
+      var currentContent = this.state.content;
+
+      output = <DeckSuccess context={this.props.context} deckParams={this.props.deckParams}/>;
+      if (Object.getOwnPropertyNames(currentContent).length === 0) {output = <DeckFailure context={this.props.context}/>}
+            
+      return (
+            <div>{output}</div>   
+        )
+      },
+    
+});
+
+var DeckFailure = React.createClass({
+    getInitialState: function () {
+        return {};
+    },
+    render: function() {
+        return (
+          <div className="ui page grid">
+            <div className="row">
+              <div className="column">
+                <h2 className="ui header">404 Page not found</h2>
+                <p>Looks like the deck does not exist or there is some database problem.</p>
+              </div>
+            </div>
+          </div>
+        );
+    }
+});
+
+var DeckSuccess = React.createClass({
     getInitialState: function () {
         return {};
     },

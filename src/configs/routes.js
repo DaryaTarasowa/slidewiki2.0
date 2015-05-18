@@ -43,6 +43,18 @@ module.exports = {
             done();
         }
     },
+    facebookLink: {
+        path: '/facebookLink/:name?/:email?/:sid?/:flag?',
+        method: 'get',
+        page: 'Facebook Link',
+        label: 'FacebookLink',
+        action: function(context, payload, done) {
+            context.executeAction(userActions.retrieveFBUser, { name: payload.params.name, email:payload.params.email, fb_id:payload.params.sid, flag: payload.params.flag }, done);
+            context.dispatch('UPDATE_PAGE_TITLE', {
+              pageTitle: 'SlideWiki | About'
+            });
+        }
+    },
     deck: {
         path: '/deck/:id/:stype?/:sid?/:mode?',
         method: 'get',

@@ -48,7 +48,7 @@ var ApplicationStore = createStore({
       return;
     }
     this.currentRoute = route;
-    this.emit('change');
+    this.emitChange();
   },
   updatePageTitle: function(title) {
     
