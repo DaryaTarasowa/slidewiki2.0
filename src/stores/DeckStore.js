@@ -21,6 +21,7 @@ module.exports = createStore({
     this.content={};
     this.redirect = false;
     this.slides = [];
+    this.languagesAvailable = [];
   },
   _showDeckStart: function (res) {
     //console.log('Start loading the deck content...');
@@ -30,9 +31,10 @@ module.exports = createStore({
     this.error = res;
     this.emitChange();
   },
-  _showDeckSuccess: function (res) {
+  _showDeckSuccess: function (res) {    
     this.id = res.id;
     this.content = res.content;
+    this.languagesAvailable = res.languagesAvailable;
     this.emitChange();
   },
   _slideListSuccess: function(res){
@@ -64,6 +66,9 @@ module.exports = createStore({
   getContent: function (res) {
     return this.content;
   },
+  getLanguagesAvailable: function(){
+      return this.languagesAvailable;
+  },
   getError: function() {
     return this.error;
   },
@@ -74,12 +79,14 @@ module.exports = createStore({
     return {
       id: this.id,
       content: this.content,
-      redirect: this.redirect
+      redirect: this.redirect,
+      languagesAvailable: this.languagesAvailable
     };
   },
   rehydrate: function (state) {
     this.id = state.id;
     this.content = state.content;
     this.redirect = state.redirect;
+    this.languagesAvailable = state.languagesAvailable;
   }
 });

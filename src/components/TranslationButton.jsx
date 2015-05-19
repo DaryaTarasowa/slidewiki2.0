@@ -19,7 +19,7 @@ var TranslationButton = React.createClass({
 
     getStateFromStores: function () {
         return {
-          
+            languagesAvailable: this.getStore(DeckStore).getLanguagesAvailable(),
             googleLanguages: this.getStore(ApplicationStore).getGoogleLanguages(),
             languageOpen: false,
             googleFormOpened : false,
@@ -73,16 +73,20 @@ var TranslationButton = React.createClass({
                     </div> 
                 )
             });
-        }        
+        } 
+        var languagesAvailableList = this.state.languagesAvailable.map(function(node, index){
+            return (
+                       <a className="item fitted vertically" href={"/deck/" + node.id}>{node.language.name}</a>
+                   )
+        })
         return (
             <div>
                 <div className="ui dropdown right basic icon right labeled button top right attached label">
                     {this.props.content.language}
                     <i className="world icon blue" ref="world_icon" onClick={this.openCloseLanguages}></i>
                     <div className="menu vertical ui small fluid" ref="menu" style={{display: this.state.languageOpen ? 'block' : 'none'}}>
-                        <a className="item fitted vertically">Arabic</a> 
-                        <a className="item fitted vertically">Chinese</a> 
-                        <a className="item fitted vertically">Danish</a> 
+                         
+                        {languagesAvailableList}
                         <div className="divider"></div>
                         <div className="ui item" onClick={this.openGoogleLanguagesTab}>
                            

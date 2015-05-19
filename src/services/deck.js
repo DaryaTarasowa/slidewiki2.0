@@ -34,6 +34,9 @@ module.exports = {
                     });
                 });
                 break;
+            case 'deck.languagesAvailable' :
+               
+                break;
             case 'deck.tree' : 
                 var deck_id = params.deck;
                 httpOptions.path = "/api/deck/tree/" + deck_id;
@@ -256,7 +259,23 @@ module.exports = {
                                         type: selector.type,
                                         content: parsed
                                     };
-                                    callback(null, res);
+                                    
+                                    httpOptions.path = "/api/content/translations/deck/" + selector.id;
+                                    http.get(httpOptions, function(response){
+                                        var body = '';
+                                        response.on('data', function(d) {
+                                            body += d;
+                                        });
+                                        response.on('end', function() {
+                                          // Data reception is done, do whatever with it!
+                                            var parsed = JSON.parse(body);
+                                            if (parsed.error){
+                                                callback(parsed.error, null);
+                                            }
+                                            res.languagesAvailable = parsed;                                                
+                                            callback(null, res);
+                                        });
+                                    });                                    
                                 }
                             });
                       });

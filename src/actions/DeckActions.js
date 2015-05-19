@@ -137,9 +137,9 @@ var DeckActions = {
                 context.dispatch('SHOW_DECK_FAILURE', err);
                 done();
                 return;
-            }
+            }            
             context.dispatch('SHOW_DECK_SUCCESS', res);
-                done(null);
+            done(null);                      
         });
     },
     
