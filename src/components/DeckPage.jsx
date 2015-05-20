@@ -24,7 +24,7 @@ var DeckPage = React.createClass({
     },
     getStateFromStores: function () {
       return {
-        content: this.getStore(DeckStore).getContent(),
+        error: this.getStore(DeckStore).getError(),
         theme_name: 'night',
       };
     },
@@ -34,10 +34,10 @@ var DeckPage = React.createClass({
     },
     render: function() {
       var output;
-      var currentContent = this.state.content;
+      var currentError = this.state.error;
 
       output = <DeckSuccess context={this.props.context} deckParams={this.props.deckParams}/>;
-      if (Object.getOwnPropertyNames(currentContent).length === 0) {output = <DeckFailure context={this.props.context}/>}
+      if (currentError) {output = <DeckFailure context={this.props.context}/>}
             
       return (
             <div>{output}</div>   
