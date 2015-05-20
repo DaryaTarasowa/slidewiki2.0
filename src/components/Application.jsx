@@ -13,6 +13,7 @@ var RouterMixin = require('flux-router-component').RouterMixin;
 var StoreMixin = require('fluxible').Mixin;
 var PlayPage = require('./PlayPage.jsx');
 var UserPage = require('./UserPage.jsx');
+var appActions = require('../actions/AppActions');
 
 
 var Application = React.createClass({
@@ -30,14 +31,13 @@ var Application = React.createClass({
         appState.isLoginFormOpened = this.getStore(AuthStore).getIsLoginFormOpened();
         return appState;
     },
-    _onChange: function () {
-        
+    _onChange: function () {        
         this.setState(this.getStateFromStores());
     },
     componentDidMount : function(){
         var user = document.cookie.username;
         console.log(document.cookie);
-
+        this.props.context.executeAction(appActions.loadLanguages);  
     },
     render: function () {
       var output='';

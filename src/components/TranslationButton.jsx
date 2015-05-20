@@ -65,6 +65,7 @@ var TranslationButton = React.createClass({
     render: function(){
         var self = this;
         var languageList;
+        
         if (this.state.googleLanguages.length){
             languageList = this.state.googleLanguages.map(function(node, index){
             return (
@@ -73,8 +74,9 @@ var TranslationButton = React.createClass({
                     </div> 
                 )
             });
-        } 
-        var languagesAvailableList = this.state.languagesAvailable.map(function(node, index){
+        }; 
+        var languagesAvailableList;
+        languagesAvailableList = this.state.languagesAvailable.map(function(node, index){
             return (
                        <a className="item fitted vertically" href={"/deck/" + node.id}>{node.language.name}</a>
                    )
