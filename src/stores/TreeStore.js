@@ -303,10 +303,10 @@ module.exports = createStore({
             this.selector = res.selector;
             if (res.selected){
                 this.selected = res.selected;
-                self._createBreadcrumbInit(function(path){
-                    self.breadcrumb = path;
-                    self.emitChange();
-                });
+                self._createBreadcrumb(this.selected, [], function (path) {
+                        self.breadcrumb = path;
+                        self.emitChange();
+                    });
             }else{
                 self.findByIdAndType(self.selector.id, self.selector.type, self.nodes, function(selected){
 

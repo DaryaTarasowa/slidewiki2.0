@@ -9,7 +9,7 @@
   },
   "main": "src/server.js",
   "scripts": {
-    "dev": "grunt --gruntfile Gruntfile.js --taskName slidewiki_new",
+    "dev": "grunt --gruntfile Gruntfile.js",
     "build": "gulp && gulp compress",
     "start": "node src/server.js"
   },
