@@ -29,6 +29,12 @@ module.exports = function (grunt) {
 				src: '**/*',           // copy all files and subfolders
 				dest: 'build/js',    // destination folder
 				expand: true           // required when using cwd
+			},
+			themes: {
+			    cwd: './src/assets/themes/',  // set working folder
+				src: '**/*',           // copy all files and subfolders
+				dest: 'build/css/themes',    // destination folder
+				expand: true           // required when using cwd
 			}
 		},
         nodemon: {
@@ -75,6 +81,6 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 
-    grunt.registerTask('default', ['clean:dist', 'copy:js',  'concat', 'concurrent:dev']);
+    grunt.registerTask('default', ['clean:dist', 'copy:js',  'copy:themes', 'concat', 'concurrent:dev']);
     
 };

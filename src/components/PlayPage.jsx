@@ -53,7 +53,7 @@ var PlayPage = React.createClass({
     },
     componentDidMount : function(){
         if (this.state.theme){
-            var url = '/public/bower_components/themes/' + this.state.theme + '.css';
+            var url = '/public/css/themes/' + this.state.theme + '.css';
             document.getElementById('theme').setAttribute('href', url); 
         }
      Reveal.initialize({
