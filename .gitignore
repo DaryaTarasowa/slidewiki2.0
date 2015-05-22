@@ -5,3 +5,4 @@ build
 test.js
 /nbproject/private/
 /nbproject
+/src/configs/config.js
