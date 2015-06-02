@@ -23,7 +23,8 @@ var FacebookLink = React.createClass({
     },
     getStateFromStores: function () {
     return {
-      error: this.getStore(UserStore).getError(),
+      error: this.getStore(AuthStore).getError(),
+      IsLoggedIn: this.getStore(AuthStore).getIsLoggedIn(),
       ObjectData: this.getStore(UserStore).getObject()
     };
   },
@@ -65,27 +66,30 @@ var LoginForm = React.createClass({
         _onChange: [AuthStore]
       }
     },
-    _onChange: function () {
-        
-        this.setState(this.getStateFromStores());
-    },
   getInitialState: function () {
 
     return this.getStateFromStores();
   },
   getStateFromStores: function () {
     return {
-      error: this.getStore(UserStore).getError(),
+      error: this.getStore(AuthStore).getError(),
+      IsLoggedIn: this.getStore(AuthStore).getIsLoggedIn(),
       ObjectData: this.getStore(UserStore).getObject()
     };
   },
+    _onChange: function () {
+        
+        this.setState(this.getStateFromStores());
+    },
   _handleSubmit: function(e) {
         var username = this.refs.username.getDOMNode().value.trim();
         var password = this.refs.password.getDOMNode().value.trim();
         this.context.executeAction(loginActions.sendLogin, {username : username, password: password});
-        this.context.executeAction(navigateAction, {url: '/'});
+
     },
     render : function(){
+        if (this.state.IsLoggedIn) this.context.executeAction(navigateAction, {url: '/'});
+        
         var userInputClass = "ui left icon input";
         var passInputClass = "ui left icon input";
         var loaderClass = "ui blue submit button";
@@ -140,31 +144,34 @@ var SignForm = React.createClass({
         _onChange: [AuthStore]
       }
     },
-    _onChange: function () {
-        
-        this.setState(this.getStateFromStores());
-    },
   getInitialState: function () {
 
     return this.getStateFromStores();
   },
   getStateFromStores: function () {
     return {
-      error: this.getStore(UserStore).getError(),
+      error: this.getStore(AuthStore).getError(),
+      IsLoggedIn: this.getStore(AuthStore).getIsLoggedIn(),
       ObjectData: this.getStore(UserStore).getObject()
     };
   },
+    _onChange: function () {
+        
+        this.setState(this.getStateFromStores());
+    },
   _handleSubmit: function(e) {
         var username = this.refs.username.getDOMNode().value.trim();
         var password = this.refs.password.getDOMNode().value.trim(); 
         var email = this.refs.email.getDOMNode().value.trim();
         var fb_id = this.state.ObjectData.fb_id;
         this.context.executeAction(loginActions.sendSignUp, {username : username, email : email, password: password, fb_id: fb_id});
-        this.context.executeAction(navigateAction, {url: '/'});
+        
+
     },
     render: function() {
+        if (this.state.IsLoggedIn) this.context.executeAction(navigateAction, {url: '/'});
 
-      var self = this;
+        var self = this;
         var loaderClass = "ui green submit button";
         if (self.state.isLoggingIn){
             loaderClass = "ui green submit button loading";
@@ -177,6 +184,8 @@ var SignForm = React.createClass({
         var emailHint;
         var inputName = url(this.state.ObjectData.name).replace(/ /g,'').toLowerCase();
         var decodedEmail = url(this.state.ObjectData.email);
+
+        console.log(this.state);
 
         if (self.state.error){
             if (self.state.error.loginError){

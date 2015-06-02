@@ -14,7 +14,6 @@ module.exports = {
     },
     'sendSignUp' : function (context, payload, done) {
         debug('send_signUp');
-        
         context.dispatch('SEND_SIGNUP', payload);
         done();
     },

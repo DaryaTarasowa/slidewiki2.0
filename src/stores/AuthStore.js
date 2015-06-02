@@ -8,6 +8,7 @@ var createStore = require('fluxible/utils/createStore');
 var internal =  {loginError : true, passError : true, message : 'An internal error occured, please try one more time'};
 var wrong_user =  {loginError : true, passError : false, message : 'The username is already taken, please pick another one'};
 var wrong_pass =  {loginError : false, passError : true, message : 'The username is correct, but the password does not match'};
+var wrong_email =  {loginError : false, passError : false, emailError: true, message : 'The email is already taken, please pick another one'};
 var no_user =  {loginError : true, passError : false, message : 'The username is not correct or you are not registered yet'};
 var empty_user =  {loginError : true, passError : false, message : 'The username is required'};
 var empty_pass =  {loginError : false, passError : true, message : 'Password is required'};
@@ -146,6 +147,11 @@ var AuthStore = createStore({
                             self.isLoggingIn = false;
                             return self.emitChange();
                             break;
+                        case 'WRONG_EMAIL' :
+                            self.error = wrong_email;
+                            self.isLoggingIn = false;
+                            return self.emitChange();
+                            break;
                         default: 
                             console.log(res.body);
                             return self._setLoggedIn(res.body);
@@ -203,6 +209,9 @@ var AuthStore = createStore({
     },
     getCurrentUser : function(){
         return this.currentUser;
+    },
+    getError: function() {
+        return this.error;
     },
     _setLoggedOut: function() {
         //localStorage.removeItem('currentUser');
