@@ -3,6 +3,7 @@ var api = require('../configs/config').api;
 var agent = require('superagent');
 var debug = require('debug');
 var createStore = require('fluxible/utils/createStore');
+var cookie = require('react-cookie');
 
 //error messages: 
 var internal =  {loginError : true, passError : true, message : 'An internal error occured, please try one more time'};
@@ -11,7 +12,7 @@ var wrong_pass =  {loginError : false, passError : true, message : 'The username
 var wrong_email =  {loginError : false, passError : false, emailError: true, message : 'The email is already taken, please pick another one'};
 var no_user =  {loginError : true, passError : false, message : 'The username is not correct or you are not registered yet'};
 var empty_user =  {loginError : true, passError : false, message : 'The username is required'};
-var empty_pass =  {loginError : false, passError : true, message : 'Password is required'};
+// var empty_pass =  {loginError : false, passError : true, message : 'Password is required'};
 var empty_email =  {loginError : false, passError : false, emailError: true, message : 'Email is required'};
 
 var AuthStore = createStore({
@@ -35,6 +36,9 @@ var AuthStore = createStore({
         this.error = null;
         this.showSignForm = false;
         this.showLoginForm = true;
+        if (cookie.load('user')){
+            this._setLoggedIn(cookie.load('user'));
+        }
     },
     onFormOpenClose: function(payload){
         this.isFormOpened = true;
@@ -162,6 +166,7 @@ var AuthStore = createStore({
                 }
             });
         }
+        // cookie.save('user', user);
         
     },
     onSendFacebook: function(payload) {
@@ -222,10 +227,11 @@ var AuthStore = createStore({
         this.showSignForm = false;
         this.showLoginForm = true;
         this.error = false;
+        cookie.remove('user');
         return this.emitChange();
     },
     _setLoggedIn: function(user) {
-        //localStorage.setItem('currentUser', user);
+        cookie.save('user', JSON.stringify(user));
         this.isLoggingIn = false;
         this.isLoggedIn = true;
         this.currentUser = user;
@@ -251,5 +257,3 @@ var AuthStore = createStore({
 });
 
 module.exports = AuthStore;
-
-

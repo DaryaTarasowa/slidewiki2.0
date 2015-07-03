@@ -14,6 +14,7 @@ var StoreMixin = require('fluxible').Mixin;
 var PlayPage = require('./PlayPage.jsx');
 var UserPage = require('./UserPage.jsx');
 var appActions = require('../actions/AppActions');
+var cookie = require('react-cookie');
 
 
 var Application = React.createClass({
@@ -29,6 +30,7 @@ var Application = React.createClass({
     getStateFromStores: function () {
         var appState = this.getStore(ApplicationStore).getState();
         appState.isLoginFormOpened = this.getStore(AuthStore).getIsLoginFormOpened();
+        appState.user = this.getStore(AuthStore).getState();
         return appState;
     },
     _onChange: function () {        
